@@ -70,8 +70,7 @@ services:
 
   # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
-    #image: fiware/tutorials.context-provider
-    image: tutorial
+    image: fiware/tutorials.context-provider
     hostname: tutorial
     container_name: fiware-tutorial
     depends_on:

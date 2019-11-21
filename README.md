@@ -8,7 +8,7 @@
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 This tutorial a wires up the dummy
-[JSON](https://json.org/)-based IoT using the [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual))
+[JSON](https://json.org/)-based IoT using the [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 devices so that measurements can be
 read and commands can be sent using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
@@ -176,7 +176,7 @@ JSON device monitor web page found at: `http://localhost:3000/device/monitor`
 This application builds on the components created in
 [previous tutorials](https://github.com/FIWARE/tutorials.Subscriptions/). It will make use of two FIWARE components -
 the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) and the
-[IoT Agent for JSON](https://fiware-iotagent-ul.readthedocs.io/en/latest/). Usage of the Orion Context Broker
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/). Usage of the Orion Context Broker
 is sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent
 rely on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We
 will also be using the dummy IoT devices created in the
@@ -186,9 +186,9 @@ Therefore the overall architecture will consist of the following elements:
 
 -   The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
     [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
--   The FIWARE [IoT Agent for JSON](https://fiware-iotagent-ul.readthedocs.io/en/latest/) which will receive
+-   The FIWARE [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) which will receive
     southbound requests using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) and convert them to
-    [JSON](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     commands for the devices
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
@@ -204,7 +204,7 @@ Therefore the overall architecture will consist of the following elements:
     -   Show which products can be bought at each store
     -   Allow users to "buy" products and reduce the stock count.
 -   A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors) using the
-    [JSON](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     protocol running over HTTP.
 
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run
@@ -262,13 +262,13 @@ The other `tutorial` container configuration values described in the YAML file a
 
 ## IoT Agent for JSON Configuration
 
-The [IoT Agent for JSON](https://fiware-iotagent-ul.readthedocs.io/en/latest/) can be instantiated within a
-Docker container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/)
-tagged `fiware/iotagent-ul`. The necessary configuration can be seen below:
+The [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) can be instantiated within a
+Docker container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/)
+tagged `fiware/iotagent-json`. The necessary configuration can be seen below:
 
 ```yaml
 iot-agent:
-    image: fiware/iotagent-ul:latest
+    image: fiware/iotagent-json:latest
     hostname: iot-agent
     container_name: fiware-iot-agent
     depends_on:
@@ -292,7 +292,7 @@ iot-agent:
         - IOTA_AUTOCAST=true
         - IOTA_MONGO_HOST=mongo-db
         - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentul
+        - IOTA_MONGO_DB=iotagentjson
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
 ```
@@ -318,7 +318,7 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_AUTOCAST        | `true`                  | Ensure JSON number values are read as numbers not strings                                                                                       |
 | IOTA_MONGO_HOST      | `context-db`            | The hostname of mongoDB - used for holding device information                                                                                         |
 | IOTA_MONGO_PORT      | `27017`                 | The port mongoDB is listening on                                                                                                                      |
-| IOTA_MONGO_DB        | `iotagentul`            | The name of the database used in mongoDB                                                                                                              |
+| IOTA_MONGO_DB        | `iotagentjson`            | The name of the database used in mongoDB                                                                                                              |
 | IOTA_HTTP_PORT       | `7896`                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041` | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
 
@@ -494,22 +494,21 @@ curl -iX POST \
      "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
      "cbroker":     "http://orion:1026",
      "entity_type": "Thing",
-     "resource":    "/iot/d"
+     "resource":    "/iot/json"
    }
  ]
 }'
 ```
 
-In the example the IoT Agent is informed that the `/iot/d` endpoint will be used and that devices will authenticate
+In the example the IoT Agent is informed that the `/iot/json` endpoint will be used and that devices will authenticate
 themselves by including the token `4jggokgpepnvsb2uv4s40d59ov`. For a JSON IoT Agent this means devices will be
 sending GET or POST requests to:
 
 ```
-http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
+http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-Which should be familiar JSON syntax from the
-[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors).
+Which should be familiar JSON syntax.
 
 When a measurement from an IoT device is received on the resource URL it needs to be interpreted and passed to the
 context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this
@@ -573,7 +572,7 @@ following request
 
 ```console
 curl -iX POST \
-  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001' \
+  'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001' \
   -H 'Content-Type: text/plain' \
   -d 'c|1'
 ```
@@ -582,7 +581,7 @@ A similar request was made in the previous tutorial (before the IoT Agent was co
 will have seen the state of each motion sensor changing and a Northbound request will be logged in the device monitor.
 
 Now the IoT Agent is connected, the service group has defined the resource upon which the IoT Agent is listening
-(`iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both of these are
+(`iot/json`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both of these are
 recognized, the measurement is valid.
 
 Because we have specifically provisioned the device (`motion001`) - the IoT Agent is able to map attributes before
@@ -788,7 +787,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Door:001",
       "entity_type": "Door",
       "transport": "HTTP",
-      "endpoint": "http://iot-sensors:3001/iot/door001",
+      "endpoint": "http://iot-sensors:3001/iot/jsonoor001",
       "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
@@ -1056,7 +1055,7 @@ curl -iX POST \
      "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
      "cbroker":     "http://orion:1026",
      "entity_type": "Thing",
-     "resource":    "/iot/d"
+     "resource":    "/iot/json"
    }
  ]
 }'
@@ -1073,7 +1072,7 @@ parameter.
 
 ```console
 curl -X GET \
-  'http://localhost:4041/iot/services?resource=/iot/d' \
+  'http://localhost:4041/iot/services?resource=/iot/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -1086,7 +1085,7 @@ curl -X GET \
     "subservice": "/",
     "service": "openiot",
     "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-    "resource": "/iot/d",
+    "resource": "/iot/json",
     "attributes": [],
     "lazy": [],
     "commands": [],
@@ -1120,7 +1119,7 @@ curl -X GET \
     "subservice": "/",
     "service": "openiot",
     "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-    "resource": "/iot/d",
+    "resource": "/iot/json",
     "attributes": [],
     "lazy": [],
     "commands": [],
@@ -1144,7 +1143,7 @@ and `apikey` parameters.
 
 ```console
 curl -iX PUT \
-  'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services?resource=/iot/json&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -1157,7 +1156,7 @@ curl -iX PUT \
 
 This example removes a provisioned service group by making a DELETE request to the `/iot/services/` endpoint.
 
-It means that requests to `http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov` (where the IoT Agent
+It means that requests to `http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov` (where the IoT Agent
 is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
 `resource` parameters must be supplied in order to identify the service group to be deleted.
 
@@ -1165,7 +1164,7 @@ is listening for **Northbound** communications) should no longer be processed by
 
 ```console
 curl -iX DELETE \
-  'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services/?resource=/iot/json&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
