@@ -8,7 +8,7 @@
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 This tutorial a wires up the dummy
-[JSON](https://json.org/)-based IoT using the [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+[JSON](https://json.org/)-based IoT devices using the [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 devices so that measurements can be
 read and commands can be sent using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
@@ -65,37 +65,45 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 </details>
 
-# What is an IoT Agent?
+# Why are multiple IoT Agents needed?
 
-> "In every operation there is an above the line and a below the line. Above the line is what you do by the book. Below
-> the line is how you do the job."
+> "Ils en conclurent que la syntaxe est une fantaisie et la grammaire une illusion."
 >
-> — John le Carré (A Perfect Spy)
+> — Gustave Flaubert (Bouvard and Pecuchet)
 
-An IoT Agent is a component that lets a group of devices send their data to and be managed from a Context Broker using
-their own native protocols. IoT Agents should also be able to deal with security aspects of the FIWARE platform
-(authentication and authorization of the channel) and provide other common services to the device programmer.
+As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be 
+managed from a Context Broker using their own native protocols. Every IoT Agent is defined for a single
+payload format, although they may be able to use multiple disparate transports for that payload.
 
-The Orion Context Broker exclusively uses [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests for
-all of its interactions. Each IoT Agent provides a **North Port**
-[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) interface which is used for context broker interactions
-and all interactions beneath this port occur using the **native protocol** of the attached devices.
+We have already encountered the Ultralight IoT Agent, which communicates using a simple bar (`|`) separated
+list of key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism - 
+by far the commonest communiation payload used on the Internet is the so-called JavaScript Object
+Notation or JSON which will be familar to any software developer.
 
-In effect, this brings a standard interface to all IoT interactions at the context information management level. Each
-group of IoT devices are able to use their own proprietary protocols and disparate transport mechanisms under the hood
-whilst the associated IoT Agent offers a facade pattern to handle this complexity.
+JSON is slightly more verbose than Ultralight, but the cost of sending larger messages is offset by the
+familiarity of the syntax. A separate [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) has been created specifically
+to cope with messages sent in this format, since a large number of common devices are able to be 
+programmed to send messages in JSON and many software libraries exist to parse the data.
 
-IoT Agents already exist or are in development for many IoT communication protocols and data models. Examples include
-the following:
+There is no practical difference between communicating using a JSON payload and communicating using an
+Ultralight payload - provided that the basis of that communication - in other words the fundamental protocol 
+defining how the messages are passed between the components remains the same. Obviously the parsing of those
+payloads within the IoT Agent - the convertion of messages from JSON to NGSI and vice-versa will be unique
+to the JSON IoT Agent.
 
--   [IoTAgent-JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) - a bridge between HTTP/MQTT messaging (with
-    a JSON payload) and NGSI
--   [IoTAgent-LWM2M](https://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - a bridge between the
-    [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) protocol and NGSI
--   [IoTAgent-UL](https://fiware-iotagent-ul.readthedocs.io/en/latest) - a bridge between HTTP/MQTT messaging (with an
-    JSON payload) and NGSI
--   [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) - a bridge between the
-    [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) protocol and NGSI
+A comparision of the two IoT Agents can be seen below:
+
+| IoT Agent for Ultralight | IoT Agent for JSON  |
+| ------------------------ | ------------------- |
+| Sample Measure `c\|1` | Sample Measure `{"count": "1"}` |
+| Sample Command `Robot1@turn\|left` | Sample Command `{"Robot1": {"turn": "left"}}` |
+| Offers 3 transports - HTTP, MQTT and AMPQ | Offers 3 transports - HTTP, MQTT and AMPQ |
+| HTTP listens from measures on `iot/d` | HTTP listens from measures on `iot/json`|
+| HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply  |
+| MQTT commands posted to the `cmd` topic | MQTT commands posted to the `cmd` topic |
+| MQTT command responses posted to the `cmdexe` topic | MQTT commands posted to the `cmdexe` topic |
+
+
 
 ## Southbound Traffic (Commands)
 
