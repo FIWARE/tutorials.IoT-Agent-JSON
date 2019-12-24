@@ -16,7 +16,7 @@ read and commands can be sent using [NGSI](https://fiware.github.io/specificatio
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
 [Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/)
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c624b462f449c58d182b)
 
 ## Contents
 
@@ -43,11 +43,8 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
         -   [Provisioning a Smart Door](#provisioning-a-smart-door)
         -   [Provisioning a Smart Lamp](#provisioning-a-smart-lamp)
     -   [Enabling Context Broker Commands](#enabling-context-broker-commands)
-        -   [Registering a Bell Command](#registering-a-bell-command)
         -   [Ringing the Bell](#ringing-the-bell)
-        -   [Registering Smart Door Commands](#registering-smart-door-commands)
         -   [Opening the Smart Door](#opening-the-smart-door)
-        -   [Registering Smart Lamp Commands](#registering-smart-lamp-commands)
         -   [Switching on the Smart Lamp](#switching-on-the-smart-lamp)
 -   [Service Group CRUD Actions](#service-group-crud-actions)
     -   [Creating a Service Group](#creating-a-service-group)
@@ -71,23 +68,23 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 >
 > — Gustave Flaubert (Bouvard and Pecuchet)
 
-As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be 
+As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be
 managed from a Context Broker using their own native protocols. Every IoT Agent is defined for a single
 payload format, although they may be able to use multiple disparate transports for that payload.
 
 We have already encountered the Ultralight IoT Agent, which communicates using a simple bar (`|`) separated
-list of key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism - 
+list of key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism -
 by far the commonest communiation payload used on the Internet is the so-called JavaScript Object
 Notation or JSON which will be familar to any software developer.
 
 JSON is slightly more verbose than Ultralight, but the cost of sending larger messages is offset by the
 familiarity of the syntax. A separate [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) has been created specifically
-to cope with messages sent in this format, since a large number of common devices are able to be 
+to cope with messages sent in this format, since a large number of common devices are able to be
 programmed to send messages in JSON and many software libraries exist to parse the data.
 
 There is no practical difference between communicating using a JSON payload and communicating using the
 Ultralight plain text payload - provided that the basis of that communication - in other words the fundamental
-protocol defining how the messages are passed between the components remains the same. Obviously the parsing of 
+protocol defining how the messages are passed between the components remains the same. Obviously the parsing of
 JSON payloads within the IoT Agent - the convertion of messages from JSON to NGSI and vice-versa will be unique
 to the JSON IoT Agent.
 
@@ -523,7 +520,7 @@ sending GET or POST requests to:
 http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-Which is very similar syntax to the Ultralight IoT Agent - only the path has changed. This allows multiple IoT Agents 
+Which is very similar syntax to the Ultralight IoT Agent - only the path has changed. This allows multiple IoT Agents
 to listen at different locations.
 
 When a measurement from an IoT device is received on the resource URL it needs to be interpreted and passed to the
@@ -756,7 +753,7 @@ command can be seen in the value of the `ring_info` attribute.
 
 ### Provisioning a Smart Door
 
-Because the underlying Ultralight and JSON protocols are so similar, actuators and devices are provisioned using 
+Because the underlying Ultralight and JSON protocols are so similar, actuators and devices are provisioned using
 the same attributes as the data the IoT Agent needs to know to communicate with the device reamins the same, and the payload parsing NGSI to JSON is delegated to the IoT Agent itself. Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with both `attributes` and `command` attributes in the body of the request.
 
 #### :nine: Request:
@@ -844,7 +841,7 @@ curl -X GET \
 ## Enabling Context Broker Commands
 
 Having connected up the IoT Agent to the IoT devices, the Orion Context Broker was informed that the commands are
-now available. In other words the IoT Agent registered itself as a 
+now available. In other words the IoT Agent registered itself as a
 [Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.
 
 Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
