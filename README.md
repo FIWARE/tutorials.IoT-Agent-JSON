@@ -851,6 +851,13 @@ Once the commands have been registered it will be possible to ring the **Bell**,
 switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending JSON
 requests directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
 
+All the communications leaving and arriving at the North port of the IoT Agent use the standard NGSI syntax. The
+transport protocol used between the IoT devices and the IoT Agent is irrelevant to this layer of communication.
+Effectively the IoT Agent is offering a simplified facade pattern of well-known endpoints to actuate any device.
+
+Therefore this section of registering and invoking commands **duplicates** the instructions found in the
+[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Agent)
+
 
 ### Ringing the Bell
 
