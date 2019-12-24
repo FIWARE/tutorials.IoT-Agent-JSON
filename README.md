@@ -74,7 +74,7 @@ payload format, although they may be able to use multiple disparate transports f
 
 We have already encountered the Ultralight IoT Agent, which communicates using a simple bar (`|`) separated
 list of key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism -
-by far the commonest communiation payload used on the Internet is the so-called JavaScript Object
+by far the commonest messaging payload used on the Internet is the so-called JavaScript Object
 Notation or JSON which will be familar to any software developer.
 
 JSON is slightly more verbose than Ultralight, but the cost of sending larger messages is offset by the
@@ -85,10 +85,10 @@ programmed to send messages in JSON and many software libraries exist to parse t
 There is no practical difference between communicating using a JSON payload and communicating using the
 Ultralight plain text payload - provided that the basis of that communication - in other words the fundamental
 protocol defining how the messages are passed between the components remains the same. Obviously the parsing of
-JSON payloads within the IoT Agent - the convertion of messages from JSON to NGSI and vice-versa will be unique
+JSON payloads within the IoT Agent - the conversion of messages from JSON to NGSI and vice-versa will be unique
 to the JSON IoT Agent.
 
-A direct comparision of the two IoT Agents can be seen below:
+A direct comparison of the two IoT Agents can be seen below:
 
 | IoT Agent for Ultralight | IoT Agent for JSON  | Protocol's Area of Concern  |
 | ------------------------ | ------------------- | ---- |
