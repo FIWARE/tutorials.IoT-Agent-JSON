@@ -14,7 +14,7 @@ read and commands can be sent using [NGSI](https://fiware.github.io/specificatio
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
-[Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/)
+[Postman documentation](https://fiware.github.io/tutorials.IoT-Agent-JSON/)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c624b462f449c58d182b)
 
@@ -128,7 +128,7 @@ For example to switch on a real-life JSON **Smart Lamp** the following interacti
     context by making an NGSI request to the **Context Broker**.
 7.  The **Context Broker** receives this Northbound request and updates the context with the result of the command.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/command-swimlane.png)
+![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/command-swimlane.png)
 
 -   Requests between **User** and **Context Broker** use NGSI
 -   Requests between **Context Broker** and **IoT Agent** use NGSI
@@ -149,7 +149,7 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
     of the interaction into the context by making an NGSI request to the **Context Broker**.
 3.  The **Context Broker** receives this Northbound request and updates the context with the result of the measurement.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/measurement-swimlane.png)
+![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/measurement-swimlane.png)
 
 -   Requests between **IoT-Device** and **IoT-Agent** use native protocols
 -   Requests between **IoT-Agent** and **Context-Broker** use NGSI
@@ -177,7 +177,7 @@ broker. Details of the architecture and protocol used can be found in the
 [IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) The state of each device can be seen on the
 JSON device monitor web page found at: `http://localhost:3000/device/monitor`
 
-![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent/img/device-monitor.png)
+![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/device-monitor.png)
 
 # Architecture
 
@@ -218,7 +218,7 @@ Therefore the overall architecture will consist of the following elements:
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run
 from exposed ports.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/architecture.png)
+![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/architecture.png)
 
 The necessary configuration information for wiring up the IoT devices and the IoT Agent can be seen in the services
 section of the associated `docker-compose.yml` file:
@@ -721,7 +721,7 @@ curl -iX POST \
 
 If you are viewing the device monitor page, you can also see the state of the bell change.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
+![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/bell-ring.gif)
 
 The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker.
 
@@ -878,7 +878,7 @@ curl -iX PATCH \
 
 If you are viewing the device monitor page, you can also see the state of the bell change.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
+![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/bell-ring.gif)
 
 
 ### Opening the Smart Door
