@@ -85,25 +85,28 @@ familiarity of the syntax. A separate [IoT Agent for JSON](https://fiware-iotage
 to cope with messages sent in this format, since a large number of common devices are able to be 
 programmed to send messages in JSON and many software libraries exist to parse the data.
 
-There is no practical difference between communicating using a JSON payload and communicating using an
-Ultralight payload - provided that the basis of that communication - in other words the fundamental protocol 
-defining how the messages are passed between the components remains the same. Obviously the parsing of those
-payloads within the IoT Agent - the convertion of messages from JSON to NGSI and vice-versa will be unique
+There is no practical difference between communicating using a JSON payload and communicating using the
+Ultralight plain text payload - provided that the basis of that communication - in other words the fundamental
+protocol defining how the messages are passed between the components remains the same. Obviously the parsing of 
+JSON payloads within the IoT Agent - the convertion of messages from JSON to NGSI and vice-versa will be unique
 to the JSON IoT Agent.
 
-A comparision of the two IoT Agents can be seen below:
+A direct comparision of the two IoT Agents can be seen below:
 
-| IoT Agent for Ultralight | IoT Agent for JSON  |
-| ------------------------ | ------------------- |
-| Sample Measure `c\|1` | Sample Measure `{"count": "1"}` |
-| Sample Command `Robot1@turn\|left` | Sample Command `{"Robot1": {"turn": "left"}}` |
-| Offers 3 transports - HTTP, MQTT and AMPQ | Offers 3 transports - HTTP, MQTT and AMPQ |
-| HTTP listens from measures on `iot/d` | HTTP listens from measures on `iot/json`|
-| HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply  |
-| MQTT commands posted to the `cmd` topic | MQTT commands posted to the `cmd` topic |
-| MQTT command responses posted to the `cmdexe` topic | MQTT commands posted to the `cmdexe` topic |
+| IoT Agent for Ultralight | IoT Agent for JSON  | Protocol's Area of Concern  |
+| ------------------------ | ------------------- | ---- |
+| Sample Measure `c\|1` | Sample Measure `{"count": "1"}` | Message Payload |
+| Sample Command `Robot1@turn\|left` | Sample Command `{"Robot1": {"turn": "left"}}` | Message Payload |
+| Content Type is `text/plain` | Content Type is `application/json` | Message Payload |
+| Offers 3 transports - HTTP, MQTT and AMPQ | Offers 3 transports - HTTP, MQTT and AMPQ | Transport Mechanism |
+| HTTP listens for measures on `iot/d` by default| HTTP listens for measures on `iot/json` by default | Transport Mechanism |
+| HTTP devices are identified by parameters `?i=XXX&k=YYY` | HTTP devices are identified by parameters `?i=XXX&k=YYY` | Device  Identification |
+| HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply  | Communications Handshake |
+| MQTT devices are identified by the path of the topic `/XXX/YYY` | MQTT devices are identified by the path of the topic  `/XXX/YYY` | Device  Identification |
+| MQTT commands posted to the `cmd` topic | MQTT commands posted to the `cmd` topic | Communications Handshake |
+| MQTT command responses posted to the `cmdexe` topic | MQTT commands posted to the `cmdexe` topic | Communications Handshake |
 
-
+As can be seen, the message payload differs entirely between the two IoT Agents, but much of the rest of the protocol remains the same.
 
 ## Southbound Traffic (Commands)
 
@@ -246,6 +249,7 @@ tutorial:
         - "DUMMY_DEVICES_PORT=3001"
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
+        - "DUMMY_DEVICES_PAYLOAD=JSON"
 ```
 
 The `tutorial` container is listening on two ports:
@@ -265,6 +269,7 @@ The `tutorial` container is driven by environment variables as shown:
 | DUMMY_DEVICES_PORT      | `3001`                       | Port used by the dummy IoT devices to receive commands                                                                                    |
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov` | Random security key used for IoT interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
 | DUMMY_DEVICES_TRANSPORT | `HTTP`                       | The transport protocol used by the dummy IoT devices                                                                                      |
+| DUMMY_DEVICES_PAYLOAD   | `JSON`                       | The message payload protocol by the dummy IoT devices                                                                                    |
 
 The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
@@ -303,6 +308,7 @@ iot-agent:
         - IOTA_MONGO_DB=iotagentjson
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
+        - IOTA_DEFAULT_RESOURCE=/iot/json
 ```
 
 The `iot-agent` container relies on the precence of the Orion Context Broker and uses a MongoDB database to hold device
@@ -329,6 +335,7 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_MONGO_DB        | `iotagentjson`            | The name of the database used in mongoDB                                                                                                              |
 | IOTA_HTTP_PORT       | `7896`                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041` | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
+| IOTA_PROVIDER_URL    | `/iot/json`             | The default path the IoT Agent uses listenening for JSON measures.                                                                                      |
 
 # Prerequisites
 
@@ -416,7 +423,7 @@ The response will look similar to the following:
     "libVersion": "2.6.0-next",
     "port": "4041",
     "baseRoot": "/",
-    "version": "1.6.0-next"
+    "version": "1.12.0-next"
 }
 ```
 
@@ -516,7 +523,8 @@ sending GET or POST requests to:
 http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-Which should be familiar JSON syntax.
+Which is very similar syntax to the Ultralight IoT Agent - only the path has changed. This allows multiple IoT Agents 
+to listen at different locations.
 
 When a measurement from an IoT device is received on the resource URL it needs to be interpreted and passed to the
 context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this
@@ -581,12 +589,13 @@ following request
 ```console
 curl -iX POST \
   'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001' \
-  -H 'Content-Type: text/plain' \
-  -d 'c|1'
+  -H 'Content-Type: application/json' \
+  -d '{"c": "1"}'
 ```
 
-A similar request was made in the previous tutorial (before the IoT Agent was connected) when the door was unlocked, you
-will have seen the state of each motion sensor changing and a Northbound request will be logged in the device monitor.
+Both the payload and the `Content-Type` have been updated. The dummy devices made a similar Ultralight request
+in the previous tutorials when the door was unlocked, you will have seen the state of each motion sensor changing
+and a Northbound request will be logged in the device monitor.
 
 Now the IoT Agent is connected, the service group has defined the resource upon which the IoT Agent is listening
 (`iot/json`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both of these are
@@ -686,7 +695,7 @@ curl -iX POST \
 ```
 
 Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
-directly to the IoT Agent's North Port using the `/v1/updateContext` endpoint. It is this endpoint that will eventually
+directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually
 be invoked by the context broker once we have connected it up. To test the configuration you can run the command
 directly as shown:
 
@@ -694,53 +703,23 @@ directly as shown:
 
 ```console
 curl -iX POST \
-  'http://localhost:4041/v1/updateContext' \
+  http://localhost:4041/v2/op/update \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
-    "contextElements": [
+    "actionType": "update",
+    "entities": [
         {
             "type": "Bell",
-            "isPattern": "false",
             "id": "urn:ngsi-ld:Bell:001",
-            "attributes": [
-                { "name": "ring", "type": "command", "value": "" }
-            ],
-            "static_attributes": [
-               {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
-            ]
-        }
-    ],
-    "updateAction": "UPDATE"
-}'
-```
-
-#### Response:
-
-```json
-{
-    "contextResponses": [
-        {
-            "contextElement": {
-                "attributes": [
-                    {
-                        "name": "ring",
-                        "type": "command",
-                        "value": ""
-                    }
-                ],
-                "id": "urn:ngsi-ld:Bell:001",
-                "isPattern": false,
-                "type": "Bell"
-            },
-            "statusCode": {
-                "code": 200,
-                "reasonPhrase": "OK"
+            "ring" : {
+                "type": "command",
+                "value": ""
             }
         }
     ]
-}
+}'
 ```
 
 If you are viewing the device monitor page, you can also see the state of the bell change.
@@ -777,8 +756,8 @@ command can be seen in the value of the `ring_info` attribute.
 
 ### Provisioning a Smart Door
 
-Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with
-both `attributes` and `command` attributes in the body of the request.
+Because the underlying Ultralight and JSON protocols are so similar, actuators and devices are provisioned using 
+the same attributes as the data the IoT Agent needs to know to communicate with the device reamins the same, and the payload parsing NGSI to JSON is delegated to the IoT Agent itself. Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with both `attributes` and `command` attributes in the body of the request.
 
 #### :nine: Request:
 
@@ -795,7 +774,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Door:001",
       "entity_type": "Door",
       "transport": "HTTP",
-      "endpoint": "http://iot-sensors:3001/iot/jsonoor001",
+      "endpoint": "http://iot-sensors:3001/iot/door001",
       "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
@@ -872,43 +851,12 @@ Once the commands have been registered it will be possible to ring the **Bell**,
 switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending JSON
 requests directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
 
-### Registering a Bell Command
-
-The **Bell** entity has been mapped to `id="urn:ngsi-ld:Bell:001"` with an entity `type="Bell"`. To register the command
-we need to inform Orion that the URL `http://orion:1026/v1` is able to provide the missing `ring` attribute. This will
-then be forwarded on to the IoT Agent. As you see this is an NGSI v1 endpoint and therefore the `legacyForwarding`
-attribute must also be set.
-
-#### :one::two: Request:
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Bell Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Bell:001", "type": "Bell"
-      }
-    ],
-    "attrs": ["ring"]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
 
 ### Ringing the Bell
 
 To invoke the `ring` command, the `ring` attribute must be updated in the context.
 
-#### :one::three: Request:
+#### :one::two: Request:
 
 ```console
 curl -iX PATCH \
@@ -928,43 +876,12 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
-### Registering Smart Door Commands
-
-The **Smart Door** entity has been mapped to `id="urn:ngsi-ld:Door:001"` with an entity `type="Door"`. To register the
-commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide the missing attributes. This
-will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 endpoint and therefore the `legacyForwarding`
-attribute must also be set.
-
-#### :one::four: Request:
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Door Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Door:001", "type": "Door"
-      }
-    ],
-    "attrs": [ "lock", "unlock", "open", "close"]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
 
 ### Opening the Smart Door
 
 To invoke the `open` command, the `open` attribute must be updated in the context.
 
-#### :one::five: Request:
+#### :one::three: Request:
 
 ```console
 curl -iX PATCH \
@@ -980,43 +897,11 @@ curl -iX PATCH \
 }'
 ```
 
-### Registering Smart Lamp Commands
-
-The **Smart Lamp** entity has been mapped to `id="urn:ngsi-ld:Lamp:001"` with an entity `type="Lamp"`. To register the
-commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide the missing attributes. This
-will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 endpoint and therefore the `legacyForwarding`
-attribute must also be set.
-
-#### :one::six: Request:
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Lamp Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Lamp:001","type": "Lamp"
-      }
-    ],
-    "attrs": [ "on", "off" ]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
-
 ### Switching on the Smart Lamp
 
 To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.
 
-#### :one::seven: Request:
+#### :one::four: Request:
 
 ```console
 curl -iX PATCH \
@@ -1030,333 +915,6 @@ curl -iX PATCH \
       "value" : ""
   }
 }'
-```
-
-# Service Group CRUD Actions
-
-The **CRUD** operations for provisioning a service group map on to the expected HTTP verbs under the `/iot/services`
-endpoint
-
--   **Create** - HTTP POST
--   **Read** - HTTP GET
--   **Update** - HTTP PUT
--   **Delete** - HTTP DELETE
-
-Use the `resource` and `apikey` parameters to uniquely identify a service group.
-
-### Creating a Service Group
-
-This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices will be sending
-messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
-
-#### :one::eight: Request:
-
-```console
-curl -iX POST \
-  'http://localhost:4041/iot/services' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
- "services": [
-   {
-     "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-     "cbroker":     "http://orion:1026",
-     "entity_type": "Thing",
-     "resource":    "/iot/json"
-   }
- ]
-}'
-```
-
-### Read Service Group Details
-
-This example obtains the full details of a provisioned service with a given `resource` path.
-
-Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource`
-parameter.
-
-#### :one::nine: Request:
-
-```console
-curl -X GET \
-  'http://localhost:4041/iot/services?resource=/iot/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-```
-
-#### Response:
-
-```json
-{
-    "_id": "5b07b2c3d7eec57836ecfed4",
-    "subservice": "/",
-    "service": "openiot",
-    "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-    "resource": "/iot/json",
-    "attributes": [],
-    "lazy": [],
-    "commands": [],
-    "entity_type": "Thing",
-    "internal_attributes": [],
-    "static_attributes": []
-}
-```
-
-The response includes all the defaults associated with each service group such as the `entity_type` and any default
-commands or attribute mappings.
-
-### List all Service Groups
-
-This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
-
-#### :two::zero: Request:
-
-```console
-curl -X GET \
-  'http://localhost:4041/iot/services' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-```
-
-#### Response:
-
-```json
-{
-    "_id": "5b07b2c3d7eec57836ecfed4",
-    "subservice": "/",
-    "service": "openiot",
-    "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-    "resource": "/iot/json",
-    "attributes": [],
-    "lazy": [],
-    "commands": [],
-    "entity_type": "Thing",
-    "internal_attributes": [],
-    "static_attributes": []
-}
-```
-
-The response includes all the defaults associated with each service group such as the `entity_type` and any default
-commands or attribute mappings.
-
-### Update a Service Group
-
-This example updates an existing service group with a given `resource` path and `apikey`
-
-Service group details can be updated by making a PUT request to the `/iot/services` endpoint and providing a `resource`
-and `apikey` parameters.
-
-#### :two::one: Request:
-
-```console
-curl -iX PUT \
-  'http://localhost:4041/iot/services?resource=/iot/json&apikey=4jggokgpepnvsb2uv4s40d59ov' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "entity_type": "IoT-Device"
-}'
-```
-
-### Delete a Service Group
-
-This example removes a provisioned service group by making a DELETE request to the `/iot/services/` endpoint.
-
-It means that requests to `http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov` (where the IoT Agent
-is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
-`resource` parameters must be supplied in order to identify the service group to be deleted.
-
-#### :two::two: Request:
-
-```console
-curl -iX DELETE \
-  'http://localhost:4041/iot/services/?resource=/iot/json&apikey=4jggokgpepnvsb2uv4s40d59ov' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-```
-
-# Device CRUD Actions
-
-The **CRUD** operations for provisioning individual devices map on to the expected HTTP verbs under the `/iot/devices`
-endpoint
-
--   **Create** - HTTP POST
--   **Read** - HTTP GET
--   **Update** - HTTP PUT
--   **Delete** - HTTP DELETE
-
-Use the `<device-id>` to uniquely identify a device.
-
-### Creating a Provisioned Device
-
-This example provisions an individual device. It maps the `device_id=bell002` to the entity URN `urn:ngsi-ld:Bell:002`
-and gives the entity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and
-is listening on `http://iot-sensors:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and
-`static_attributes` can also be provisioned.
-
-#### :two::three: Request:
-
-```console
-curl -iX POST \
-  'http://localhost:4041/iot/devices' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "devices": [
-    {
-      "device_id": "bell002",
-      "entity_name": "urn:ngsi-ld:Bell:002",
-      "entity_type": "Bell",
-      "transport": "HTTP",
-      "endpoint": "http://iot-sensors:3001/iot/bell002",
-      "commands": [
-        {
-          "name": "ring",
-          "type": "command"
-        }
-       ],
-       "static_attributes": [
-         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:002"}
-      ]
-    }
-  ]
-}'
-```
-
-### Read Provisioned Device Details
-
-This example obtains the full details of a provisioned device with a given `<device-id>` path.
-
-Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
-
-#### :two::four: Request:
-
-```console
-curl -X GET \
-  'http://localhost:4041/iot/devices/bell002' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-```
-
-#### Response:
-
-The response includes all the commands and attributes mappings associated with the device.
-
-```json
-{
-    "device_id": "bell002",
-    "service": "openiot",
-    "service_path": "/",
-    "entity_name": "urn:ngsi",
-    "entity_type": "Bell",
-    "endpoint": "http://iot-sensors:3001/iot/bell002",
-    "transport": "HTTP",
-    "attributes": [],
-    "lazy": [],
-    "commands": [
-        {
-            "object_id": "ring",
-            "name": "ring",
-            "type": "command"
-        }
-    ],
-    "static_attributes": [
-        {
-            "name": "refStore",
-            "type": "Relationship",
-            "value": "urn:ngsi-ld:Store:002"
-        }
-    ],
-    "protocol": "PDI-IoTA-JSON"
-}
-```
-
-### List all Provisioned Devices
-
-This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.
-
-#### :two::five: Request:
-
-```console
-curl -X GET \
-  'http://localhost:4041/iot/devices' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-```
-
-#### Response:
-
-The response includes all the commands and attributes mappings associated with all devices.
-
-```json
-{
-    "count": 5,
-    "devices": [
-      {
-          "device_id": "bell002",
-          "service": "openiot",
-          "service_path": "/",
-          "entity_name": "urn:ngsi",
-          "entity_type": "Bell",
-          "endpoint": "http://iot-sensors:3001/iot/bell002",
-          "transport": "HTTP",
-          "attributes": [],
-          "lazy": [],
-          "commands": [
-              {
-                  "object_id": "ring",
-                  "name": "ring",
-                  "type": "command"
-              }
-          ],
-          "static_attributes": [
-              {
-                  "name": "refStore",
-                  "type": "Relationship",
-                  "value": "urn:ngsi-ld:Store:002"
-              }
-          ],
-          "protocol": "PDI-IoTA-JSON"
-      },
-      etc...
-    ]
-}
-```
-
-### Update a Provisioned Device
-
-This example updates an existing provisioned device by making a PUT request to the `/iot/devices/<device-id>` endpoint.
-
-#### :two::six: Request:
-
-```console
-curl -iX PUT \
-  'http://localhost:4041/iot/devices/bell002' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "entity_type": "IoT-Device"
-}'
-```
-
-### Delete a Provisioned Device
-
-This example removes a provisioned device by making a DELETE request to the `/iot/devices/<device-id>` endpoint.
-
-The device attributes will no longer be mapped and commands can no longer be sent to the device. If the device is making
-active measurements, they will still be handled with default values if the associated service has not been deleted.
-
-#### :two::seven: Request:
-
-```console
-curl -iX DELETE \
-  'http://localhost:4041/iot/devices/bell002' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
 ```
 
 # Next Steps
