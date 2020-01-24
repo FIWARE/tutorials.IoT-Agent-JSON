@@ -7,10 +7,10 @@
 [![JSON](https://img.shields.io/badge/JSON-5dc0cf.svg)](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
-This tutorial a wires up the dummy
-[JSON](https://json.org/)-based IoT devices using the [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-devices so that measurements can be
-read and commands can be sent using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
+This tutorial a wires up the dummy [JSON](https://json.org/)-based IoT devices using the
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+devices so that measurements can be read and commands can be sent using
+[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
@@ -68,42 +68,43 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 >
 > — Gustave Flaubert (Bouvard and Pecuchet)
 
-As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be
-managed from a Context Broker using their own native protocols. Every IoT Agent is defined for a single
-payload format, although they may be able to use multiple disparate transports for that payload.
+As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be managed from a
+Context Broker using their own native protocols. Every IoT Agent is defined for a single payload format, although they
+may be able to use multiple disparate transports for that payload.
 
-We have already encountered the Ultralight IoT Agent, which communicates using a simple bar (`|`) separated
-list of key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism -
-by far the commonest messaging payload used on the Internet is the so-called JavaScript Object
-Notation or JSON which will be familar to any software developer.
+We have already encountered the Ultralight IoT Agent, which communicates using a simple bar (`|`) separated list of
+key-value pairs. This payload is a simple, terse but relatively obscure communication mechanism - by far the commonest
+messaging payload used on the Internet is the so-called JavaScript Object Notation or JSON which will be familar to any
+software developer.
 
-JSON is slightly more verbose than Ultralight, but the cost of sending larger messages is offset by the
-familiarity of the syntax. A separate [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) has been created specifically
-to cope with messages sent in this format, since a large number of common devices are able to be
-programmed to send messages in JSON and many software libraries exist to parse the data.
+JSON is slightly more verbose than Ultralight, but the cost of sending larger messages is offset by the familiarity of
+the syntax. A separate
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+has been created specifically to cope with messages sent in this format, since a large number of common devices are able
+to be programmed to send messages in JSON and many software libraries exist to parse the data.
 
-There is no practical difference between communicating using a JSON payload and communicating using the
-Ultralight plain text payload - provided that the basis of that communication - in other words the fundamental
-protocol defining how the messages are passed between the components remains the same. Obviously the parsing of
-JSON payloads within the IoT Agent - the conversion of messages from JSON to NGSI and vice-versa will be unique
-to the JSON IoT Agent.
+There is no practical difference between communicating using a JSON payload and communicating using the Ultralight plain
+text payload - provided that the basis of that communication - in other words the fundamental protocol defining how the
+messages are passed between the components remains the same. Obviously the parsing of JSON payloads within the IoT
+Agent - the conversion of messages from JSON to NGSI and vice-versa will be unique to the JSON IoT Agent.
 
 A direct comparison of the two IoT Agents can be seen below:
 
-| IoT Agent for Ultralight | IoT Agent for JSON  | Protocol's Area of Concern  |
-| ------------------------ | ------------------- | ---- |
-| Sample Measure `c\|1` | Sample Measure `{"count": "1"}` | Message Payload |
-| Sample Command `Robot1@turn\|left` | Sample Command `{"Robot1": {"turn": "left"}}` | Message Payload |
-| Content Type is `text/plain` | Content Type is `application/json` | Message Payload |
-| Offers 3 transports - HTTP, MQTT and AMPQ | Offers 3 transports - HTTP, MQTT and AMPQ | Transport Mechanism |
-| HTTP listens for measures on `iot/d` by default| HTTP listens for measures on `iot/json` by default | Transport Mechanism |
-| HTTP devices are identified by parameters `?i=XXX&k=YYY` | HTTP devices are identified by parameters `?i=XXX&k=YYY` | Device  Identification |
-| HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply  | Communications Handshake |
-| MQTT devices are identified by the path of the topic `/XXX/YYY` | MQTT devices are identified by the path of the topic  `/XXX/YYY` | Device  Identification |
-| MQTT commands posted to the `cmd` topic | MQTT commands posted to the `cmd` topic | Communications Handshake |
-| MQTT command responses posted to the `cmdexe` topic | MQTT commands posted to the `cmdexe` topic | Communications Handshake |
+| IoT Agent for Ultralight                                            | IoT Agent for JSON                                                  | Protocol's Area of Concern |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------- | -------------------------- |
+| Sample Measure `c\|1`                                               | Sample Measure `{"count": "1"}`                                     | Message Payload            |
+| Sample Command `Robot1@turn\|left`                                  | Sample Command `{"Robot1": {"turn": "left"}}`                       | Message Payload            |
+| Content Type is `text/plain`                                        | Content Type is `application/json`                                  | Message Payload            |
+| Offers 3 transports - HTTP, MQTT and AMPQ                           | Offers 3 transports - HTTP, MQTT and AMPQ                           | Transport Mechanism        |
+| HTTP listens for measures on `iot/d` by default                     | HTTP listens for measures on `iot/json` by default                  | Transport Mechanism        |
+| HTTP devices are identified by parameters `?i=XXX&k=YYY`            | HTTP devices are identified by parameters `?i=XXX&k=YYY`            | Device Identification      |
+| HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply | Communications Handshake   |
+| MQTT devices are identified by the path of the topic `/XXX/YYY`     | MQTT devices are identified by the path of the topic `/XXX/YYY`     | Device Identification      |
+| MQTT commands posted to the `cmd` topic                             | MQTT commands posted to the `cmd` topic                             | Communications Handshake   |
+| MQTT command responses posted to the `cmdexe` topic                 | MQTT commands posted to the `cmdexe` topic                          | Communications Handshake   |
 
-As can be seen, the message payload differs entirely between the two IoT Agents, but much of the rest of the protocol remains the same.
+As can be seen, the message payload differs entirely between the two IoT Agents, but much of the rest of the protocol
+remains the same.
 
 ## Southbound Traffic (Commands)
 
@@ -120,10 +121,9 @@ For example to switch on a real-life JSON **Smart Lamp** the following interacti
 2.  The **Context Broker** finds the entity within the context and notes that the context provision for this attribute
     has been delegated to the IoT Agent
 3.  The **Context broker** sends an NGSI request to the North Port of the **IoT Agent** to invoke the command
-4.  The **IoT Agent** receives this Southbound request and converts it to JSON syntax and passes it on to the
-    **Smart Lamp**
-5.  The **Smart Lamp** switches on the lamp and returns the result of the command to the **IoT Agent** in JSON
-    syntax
+4.  The **IoT Agent** receives this Southbound request and converts it to JSON syntax and passes it on to the **Smart
+    Lamp**
+5.  The **Smart Lamp** switches on the lamp and returns the result of the command to the **IoT Agent** in JSON syntax
 6.  The **IoT Agent** receives this Northbound request, interprets it and passes the result of the interaction into the
     context by making an NGSI request to the **Context Broker**.
 7.  The **Context Broker** receives this Northbound request and updates the context with the result of the command.
@@ -145,8 +145,8 @@ real world into the context data of the system.
 For example for a real-life **Motion Sensor** to send a count measurement the following interactions would occur:
 
 1.  A **Motion Sensor** makes a measurement and passes the result to the **IoT Agent**
-2.  The **IoT Agent** receives this Northbound request, converts the result from JSON syntax and passes the result
-    of the interaction into the context by making an NGSI request to the **Context Broker**.
+2.  The **IoT Agent** receives this Northbound request, converts the result from JSON syntax and passes the result of
+    the interaction into the context by making an NGSI request to the **Context Broker**.
 3.  The **Context Broker** receives this Northbound request and updates the context with the result of the measurement.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/measurement-swimlane.png)
@@ -174,8 +174,8 @@ This base functionality has been abstracted out into a common
 
 For the purpose of this tutorial, a series of dummy IoT devices have been created, which will be attached to the context
 broker. Details of the architecture and protocol used can be found in the
-[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) The state of each device can be seen on the
-JSON device monitor web page found at: `http://localhost:3000/device/monitor`
+[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) The state of each device can be seen on the JSON
+device monitor web page found at: `http://localhost:3000/device/monitor`
 
 ![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/device-monitor.png)
 
@@ -184,11 +184,10 @@ JSON device monitor web page found at: `http://localhost:3000/device/monitor`
 This application builds on the components created in
 [previous tutorials](https://github.com/FIWARE/tutorials.Subscriptions/). It will make use of two FIWARE components -
 the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) and the
-[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/). Usage of the Orion Context Broker
-is sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent
-rely on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We
-will also be using the dummy IoT devices created in the
-[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/). Usage of the Orion Context Broker is
+sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent rely
+on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We will
+also be using the dummy IoT devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
 
 Therefore the overall architecture will consist of the following elements:
 
@@ -196,8 +195,8 @@ Therefore the overall architecture will consist of the following elements:
     [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
 -   The FIWARE [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) which will receive
     southbound requests using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) and convert them to
-    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    commands for the devices
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) commands
+    for the devices
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
         registrations
@@ -212,8 +211,8 @@ Therefore the overall architecture will consist of the following elements:
     -   Show which products can be bought at each store
     -   Allow users to "buy" products and reduce the stock count.
 -   A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors) using the
-    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    protocol running over HTTP.
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) protocol
+    running over HTTP.
 
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run
 from exposed ports.
@@ -252,28 +251,28 @@ tutorial:
 The `tutorial` container is listening on two ports:
 
 -   Port `3000` is exposed so we can see the web page displaying the Dummy IoT devices.
--   Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make JSON commands without
-    being part of the same network.
+-   Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make JSON commands without being
+    part of the same network.
 
 The `tutorial` container is driven by environment variables as shown:
 
-| Key                     | Value                        | Description                                                                                                                               |
-| ----------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| DEBUG                   | `tutorial:*`                 | Debug flag used for logging                                                                                                               |
-| WEB_APP_PORT            | `3000`                       | Port used by web-app which displays the dummy device data                                                                                 |
-| IOTA_HTTP_HOST          | `iot-agent`                  | The hostname of the IoT Agent for JSON - see below                                                                              |
-| IOTA_HTTP_PORT          | `7896`                       | The port that the IoT Agent for JSON will be listening on. `7896` is a common default for JSON over HTTP                  |
-| DUMMY_DEVICES_PORT      | `3001`                       | Port used by the dummy IoT devices to receive commands                                                                                    |
+| Key                     | Value                        | Description                                                                                                                        |
+| ----------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| DEBUG                   | `tutorial:*`                 | Debug flag used for logging                                                                                                        |
+| WEB_APP_PORT            | `3000`                       | Port used by web-app which displays the dummy device data                                                                          |
+| IOTA_HTTP_HOST          | `iot-agent`                  | The hostname of the IoT Agent for JSON - see below                                                                                 |
+| IOTA_HTTP_PORT          | `7896`                       | The port that the IoT Agent for JSON will be listening on. `7896` is a common default for JSON over HTTP                           |
+| DUMMY_DEVICES_PORT      | `3001`                       | Port used by the dummy IoT devices to receive commands                                                                             |
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov` | Random security key used for IoT interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
-| DUMMY_DEVICES_TRANSPORT | `HTTP`                       | The transport protocol used by the dummy IoT devices                                                                                      |
-| DUMMY_DEVICES_PAYLOAD   | `JSON`                       | The message payload protocol by the dummy IoT devices                                                                                    |
+| DUMMY_DEVICES_TRANSPORT | `HTTP`                       | The transport protocol used by the dummy IoT devices                                                                               |
+| DUMMY_DEVICES_PAYLOAD   | `JSON`                       | The message payload protocol by the dummy IoT devices                                                                              |
 
 The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
 ## IoT Agent for JSON Configuration
 
-The [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) can be instantiated within a
-Docker container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/)
+The [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) can be instantiated within a Docker
+container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/)
 tagged `fiware/iotagent-json`. The necessary configuration can be seen below:
 
 ```yaml
@@ -326,13 +325,13 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_LOG_LEVEL       | `DEBUG`                 | The log level of the IoT Agent                                                                                                                        |
 | IOTA_TIMESTAMP       | `true`                  | Whether to supply timestamp information with each measurement received from attached devices                                                          |
 | IOTA_CB_NGSI_VERSION | `v2`                    | Whether to supply use NGSI v2 when sending updates for active attributes                                                                              |
-| IOTA_AUTOCAST        | `true`                  | Ensure JSON number values are read as numbers not strings                                                                                       |
+| IOTA_AUTOCAST        | `true`                  | Ensure JSON number values are read as numbers not strings                                                                                             |
 | IOTA_MONGO_HOST      | `context-db`            | The hostname of mongoDB - used for holding device information                                                                                         |
 | IOTA_MONGO_PORT      | `27017`                 | The port mongoDB is listening on                                                                                                                      |
-| IOTA_MONGO_DB        | `iotagentjson`            | The name of the database used in mongoDB                                                                                                              |
+| IOTA_MONGO_DB        | `iotagentjson`          | The name of the database used in mongoDB                                                                                                              |
 | IOTA_HTTP_PORT       | `7896`                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041` | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
-| IOTA_PROVIDER_URL    | `/iot/json`             | The default path the IoT Agent uses listenening for JSON measures.                                                                                      |
+| IOTA_PROVIDER_URL    | `/iot/json`             | The default path the IoT Agent uses listenening for JSON measures.                                                                                    |
 
 # Prerequisites
 
@@ -513,15 +512,15 @@ curl -iX POST \
 ```
 
 In the example the IoT Agent is informed that the `/iot/json` endpoint will be used and that devices will authenticate
-themselves by including the token `4jggokgpepnvsb2uv4s40d59ov`. For a JSON IoT Agent this means devices will be
-sending GET or POST requests to:
+themselves by including the token `4jggokgpepnvsb2uv4s40d59ov`. For a JSON IoT Agent this means devices will be sending
+GET or POST requests to:
 
 ```
 http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-Which is very similar syntax to the Ultralight IoT Agent - only the path has changed. This allows multiple IoT Agents
-to listen at different locations.
+Which is very similar syntax to the Ultralight IoT Agent - only the path has changed. This allows multiple IoT Agents to
+listen at different locations.
 
 When a measurement from an IoT device is received on the resource URL it needs to be interpreted and passed to the
 context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this
@@ -590,9 +589,9 @@ curl -iX POST \
   -d '{"c": "1"}'
 ```
 
-Both the payload and the `Content-Type` have been updated. The dummy devices made a similar Ultralight request
-in the previous tutorials when the door was unlocked, you will have seen the state of each motion sensor changing
-and a Northbound request will be logged in the device monitor.
+Both the payload and the `Content-Type` have been updated. The dummy devices made a similar Ultralight request in the
+previous tutorials when the door was unlocked, you will have seen the state of each motion sensor changing and a
+Northbound request will be logged in the device monitor.
 
 Now the IoT Agent is connected, the service group has defined the resource upon which the IoT Agent is listening
 (`iot/json`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both of these are
@@ -692,9 +691,9 @@ curl -iX POST \
 ```
 
 Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
-directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually
-be invoked by the context broker once we have connected it up. To test the configuration you can run the command
-directly as shown:
+directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually be
+invoked by the context broker once we have connected it up. To test the configuration you can run the command directly
+as shown:
 
 #### :seven: Request:
 
@@ -753,8 +752,11 @@ command can be seen in the value of the `ring_info` attribute.
 
 ### Provisioning a Smart Door
 
-Because the underlying Ultralight and JSON protocols are so similar, actuators and devices are provisioned using
-the same attributes as the data the IoT Agent needs to know to communicate with the device reamins the same, and the payload parsing NGSI to JSON is delegated to the IoT Agent itself. Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with both `attributes` and `command` attributes in the body of the request.
+Because the underlying Ultralight and JSON protocols are so similar, actuators and devices are provisioned using the
+same attributes as the data the IoT Agent needs to know to communicate with the device reamins the same, and the payload
+parsing NGSI to JSON is delegated to the IoT Agent itself. Provisioning a device which offers both commands and
+measurements is merely a matter of making an HTTP POST request with both `attributes` and `command` attributes in the
+body of the request.
 
 #### :nine: Request:
 
@@ -840,13 +842,13 @@ curl -X GET \
 
 ## Enabling Context Broker Commands
 
-Having connected up the IoT Agent to the IoT devices, the Orion Context Broker was informed that the commands are
-now available. In other words the IoT Agent registered itself as a
+Having connected up the IoT Agent to the IoT devices, the Orion Context Broker was informed that the commands are now
+available. In other words the IoT Agent registered itself as a
 [Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.
 
 Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
-switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending JSON
-requests directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
+switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending JSON requests
+directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
 
 All the communications leaving and arriving at the North port of the IoT Agent use the standard NGSI syntax. The
 transport protocol used between the IoT devices and the IoT Agent is irrelevant to this layer of communication.
@@ -854,7 +856,6 @@ Effectively the IoT Agent is offering a simplified facade pattern of well-known 
 
 Therefore this section of registering and invoking commands **duplicates** the instructions found in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Agent)
-
 
 ### Ringing the Bell
 
@@ -879,7 +880,6 @@ curl -iX PATCH \
 If you are viewing the device monitor page, you can also see the state of the bell change.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/bell-ring.gif)
-
 
 ### Opening the Smart Door
 
