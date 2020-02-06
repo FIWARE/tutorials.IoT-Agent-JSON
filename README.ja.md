@@ -388,7 +388,7 @@ iot-agent:
 | IOTA_MONGO_DB        | `iotagentjson`          | mongoDB で使用されるデータベースの名前                                                                                                |
 | IOTA_HTTP_PORT       | `7896`                  | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                               |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041` | コマンドの登録時に Context Broker に渡される URL。ContextBroker がコマンドをデバイスに発行するときに転送 URL の場所として使用されます |
-| IOTA_PROVIDER_URL    | `/iot/json`             | IoT Agent が JSON 測定値のリッスンを使用するデフォルトのパス                                                                          |
+| IOTA_DEFAULT_RESOURCE| `/iot/json`             | IoT Agent が JSON 測定値のリッスンを使用するデフォルトのパス                                                                          |
 
 <a name="prerequisites"></a>
 

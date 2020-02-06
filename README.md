@@ -333,7 +333,7 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_MONGO_DB        | `iotagentjson`          | The name of the database used in mongoDB                                                                                                              |
 | IOTA_HTTP_PORT       | `7896`                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041` | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
-| IOTA_PROVIDER_URL    | `/iot/json`             | The default path the IoT Agent uses listenening for JSON measures.                                                                                    |
+| IOTA_DEFAULT_RESOURCE| `/iot/json`             | The default path the IoT Agent uses listenening for JSON measures.                                                                                    |
 
 # Prerequisites
 
