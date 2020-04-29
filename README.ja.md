@@ -11,7 +11,7 @@
 [JSON 用の IoT Agent](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 を使用して、ダミーの [JSON](https://json.org/) ベースの IoT デバイスを接続し、
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
-に送信された [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用して、
+に送信された [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用して、
 測定値を読み取ったり、コマンドを送信したりできるようにします。
 
 チュートリアルでは [cUrl](https://ec.haxx.se/) コマンドを使用しますが、
@@ -230,9 +230,9 @@ Orion Context Broker と IoT Agent はどちらも、オープンソースの
 
 -   FIWARE
     [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) は
-    、[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用して
+    、[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用して
     リクエストを受信します
--   FIWARE [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/)は、[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用してサウスバウンド・リクエストを受信し、それらをデバイスの [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換します
+-   FIWARE [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/)は、[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用してサウスバウンド・リクエストを受信し、それらをデバイスの [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換します
 -   基礎となる [MongoDB](https://www.mongodb.com/) データベース:
     -   **Orion Context Broker** がデータ・エンティティ、サブスクリプション、
         レジストレーションなどのコンテキスト・データ情報を保持するために
@@ -241,12 +241,12 @@ Orion Context Broker と IoT Agent はどちらも、オープンソースの
         ために使用します
 -   **Context Provider NGSI** プロキシは、このチュートリアルでは使用しません
     が、次のことを行います :
-    -   [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
         を使用してリクエストを受信します
     -   独自のフォーマットの APIs を使用して、公開されているデータソースへの
         リクエストを行います
     -   コンテキスト・データを
-        [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+        [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
         形式でOrion Context Brokerに返します
 -   **ストック管理フロントエンド**は、このチュートリアルでは使用しませんが、
         次のことを行います :
