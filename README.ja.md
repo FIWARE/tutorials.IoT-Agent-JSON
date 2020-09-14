@@ -204,7 +204,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 このチュートリアルの目的のために、一連のダミー IoT デバイスが作成され、
 Context Broker に接続されます。使用されるアーキテクチャとプロトコルの詳細は、
-[IoT Sensors チュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)
+[IoT Sensors チュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
 で確認できます。各デバイスの状態は、JSON デバイス・モニタの Web ページで
 確認できます : `http://localhost:3000/device/monitor`
 
@@ -257,7 +257,7 @@ Orion Context Broker と IoT Agent はどちらも、オープンソースの
 -   HTTP 上で実行される
     [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     プロトコルを使用する、
-    [ダミー IoT デバイス](https://github.com/FIWARE/tutorials.IoT-Sensors)
+    [ダミー IoT デバイス](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
     のセットとして機能する Web サーバ
 
 要素間の相互作用はすべて HTTP リクエストによって開始されるため、エンティティは
@@ -981,7 +981,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 として登録されました。
 
 コマンドが登録されると、
-[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)
+[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
 で行ったように JSON リクエストを IoT デバイスに直接送信するのではなく、
 Orion Context Broker にリクエストを送信することで、**Bell** を呼び出し、
 **Smart Door** を開閉し、**Smart Lamp** のオン/オフを切り替えることができます。
