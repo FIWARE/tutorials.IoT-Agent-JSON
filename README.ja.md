@@ -447,7 +447,7 @@ Docker バージョン 18.03 以降と Docker Compose 1.21 以上を使用して
 い :
 
 ```console
-git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
+git clone https://github.com/FIWARE/tutorials.IoT-Agent-JSON.git
 cd tutorials.IoT-Agent
 git checkout NGSI-v2
 
