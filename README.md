@@ -148,8 +148,8 @@ real world into the context data of the system.
 For example for a real-life **Soil Sensor** to send a humidity reading, the following interactions would occur:
 
 1.  A **Soil Sensor** makes a measurement and passes the result to the **IoT Agent**
-2.  The **IoT Agent** receives this Northbound request, converts the result from JSON syntax and passes the result
-    of the interaction into the context by making an NGSI-LD request to the **Context Broker**.
+2.  The **IoT Agent** receives this Northbound request, converts the result from JSON syntax and passes the result of
+    the interaction into the context by making an NGSI-LD request to the **Context Broker**.
 3.  The **Context Broker** receives this Northbound request and updates the context with the result of the measurement.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent-JSON/img/measurement-swimlane.png)
@@ -187,10 +187,10 @@ seen on the JSON device monitor web page found at: `http://localhost:3000/device
 This application builds on the components created in
 [previous tutorials](https://github.com/FIWARE/tutorials.Subscriptions/). It will make use of two FIWARE components - an
 NGSI-LD Context Broker such as [Orion](https://fiware-orion.readthedocs.io/en/latest/) and the
-[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/). Usage of the Context Broker is
-sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent rely
-on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We will
-also be using the dummy IoT devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/). Usage of the Context Broker is sufficient
+for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent rely on open
+source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We will also be
+using the dummy IoT devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
 
 Therefore the overall architecture will consist of the following elements:
 
@@ -200,8 +200,8 @@ Therefore the overall architecture will consist of the following elements:
     southbound requests using
     [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/generated/full_api.json)
     and convert them to
-    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    commands for the devices
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) commands
+    for the devices
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
         registrations
@@ -251,29 +251,29 @@ tutorial:
 The `tutorial` container is listening on two ports:
 
 -   Port `3000` is exposed so we can see the web page displaying the Dummy IoT devices.
--   Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make JSON commands without
-    being part of the same network.
+-   Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make JSON commands without being
+    part of the same network.
 
 The `tutorial` container is driven by environment variables as shown:
 
-| Key                     | Value                                                 | Description                                                                                                                               |
-| ----------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| DEBUG                   | `tutorial:*`                                          | Debug flag used for logging                                                                                                               |
-| WEB_APP_PORT            | `3000`                                                | Port used by web-app which displays the dummy device data                                                                                 |
-| IOTA_HTTP_HOST          | `iot-agent`                                           | The hostname of the IoT Agent for JSON - see below                                                                              |
-| IOTA_HTTP_PORT          | `7896`                                                | The port that the IoT Agent for JSON will be listening on. `7896` is a common default for JSON over HTTP                  |
-| DUMMY_DEVICES_PORT      | `3001`                                                | Port used by the dummy IoT devices to receive commands                                                                                    |
+| Key                     | Value                                                 | Description                                                                                                                         |
+| ----------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| DEBUG                   | `tutorial:*`                                          | Debug flag used for logging                                                                                                         |
+| WEB_APP_PORT            | `3000`                                                | Port used by web-app which displays the dummy device data                                                                           |
+| IOTA_HTTP_HOST          | `iot-agent`                                           | The hostname of the IoT Agent for JSON - see below                                                                                  |
+| IOTA_HTTP_PORT          | `7896`                                                | The port that the IoT Agent for JSON will be listening on. `7896` is a common default for JSON over HTTP                            |
+| DUMMY_DEVICES_PORT      | `3001`                                                | Port used by the dummy IoT devices to receive commands                                                                              |
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov`                          | Random security key used for JSON interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
-| DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | The transport protocol used by the dummy IoT devices                                                                                      |
-| DUMMY_DEVICES_PAYLOAD   | `JSON`                                                | The payload format used by the dummy IoT devices                                                                                         |
-| IOTA_JSON_LD_CONTEXT    | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                                 |
+| DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | The transport protocol used by the dummy IoT devices                                                                                |
+| DUMMY_DEVICES_PAYLOAD   | `JSON`                                                | The payload format used by the dummy IoT devices                                                                                    |
+| IOTA_JSON_LD_CONTEXT    | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                           |
 
 The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
 ## IoT Agent for JSON Configuration
 
-The [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) can be instantiated within a
-Docker container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/)
+The [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) can be instantiated within a Docker
+container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/)
 tagged `fiware/iotagent-json`. The necessary configuration can be seen below:
 
 ```yaml
@@ -328,7 +328,7 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_LOG_LEVEL       | `DEBUG`                                               | The log level of the IoT Agent                                                                                                                        |
 | IOTA_TIMESTAMP       | `true`                                                | Whether to supply timestamp information with each measurement received from attached devices                                                          |
 | IOTA_CB_NGSI_VERSION | `LD`                                                  | Whether to supply use NGSI-LD when sending updates for active attributes                                                                              |
-| IOTA_AUTOCAST        | `true`                                                | Ensure JSON number values are read as numbers not strings                                                                                       |
+| IOTA_AUTOCAST        | `true`                                                | Ensure JSON number values are read as numbers not strings                                                                                             |
 | IOTA_MONGO_HOST      | `context-db`                                          | The hostname of mongoDB - used for holding device information                                                                                         |
 | IOTA_MONGO_PORT      | `27017`                                               | The port mongoDB is listening on                                                                                                                      |
 | IOTA_MONGO_DB        | `iotagentul`                                          | The name of the database used in mongoDB                                                                                                              |
@@ -349,10 +349,10 @@ technology which allows to different components isolated into their respective e
 -   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)
 
 **Docker Compose** is a tool for defining and running multi-container Docker applications. A
-[YAML file](https://raw.githubusercontent.com/FIWARE/tutorials.IoT-Agent-JSON/NGSI-LD/docker-compose/orion-ld.yml) is used
-configure the required services for the application. This means all container services can be brought up in a single
-command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux users
-will need to follow the instructions found [here](https://docs.docker.com/compose/install/)
+[YAML file](https://raw.githubusercontent.com/FIWARE/tutorials.IoT-Agent-JSON/NGSI-LD/docker-compose/orion-ld.yml) is
+used configure the required services for the application. This means all container services can be brought up in a
+single command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux
+users will need to follow the instructions found [here](https://docs.docker.com/compose/install/)
 
 You can check your current **Docker** and **Docker Compose** versions using the following commands:
 
@@ -632,7 +632,28 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 In the request we are associating the device `temperature001` with the URN `urn:ngsi-ld:Device:temperature001` and
 mapping the device reading `t` with the context attribute `temperature` (which is defined as **Property** with
 appropriate meta-data). A `controlledAsset` **Relationship** is also defined as a `static_attribute`, placing the device
-within the **Building** `urn:ngsi-ld:Building:barn001`
+within the **Building** `urn:ngsi-ld:Building:barn001`.
+
+> Static attributes are useful as additional data on an entity to enable querying using the `q` parameter. For example
+> the Smart Data Models [Device](https://github.com/smart-data-models/dataModel.Device/blob/master/Device/doc/spec.md)
+> model defines attributes such as `category` or `controlledProperty` which enable queries to be made like:
+>
+> -   _Which **Actuators** currently have a low `batteryLevel`?_
+>
+> `/ngsi-ld/v1/entities?q=category=="actuator";batteryLevel<0.1`
+>
+> -   _Which **Devices** measuring `fillingLevel` were installed before January 2020?_
+>
+> `/ngsi-ld/v1/entities?q=controlledProperty=="fillingLevel";dateInstalled<"2020-01-25T00:00:00.000Z"`
+>
+> Obviously static data can be extended as necessary and can also include additional data such as a unique `name` or
+> `serialNumber` for each device should the entity ID be too inflexible for queries.
+>
+> `/ngsi-ld/v1/entities?q=serialNumber=="XS403001-002"`
+>
+> Additionally devices with a fixed `location` static attribute can also be queried using the Geofencing parameters.
+>
+> `/ngsi-ld/v1/entities?georel=near;maxDistance:1500&geometry=point&coords=52.5162,13.3777`
 
 You can simulate a dummy IoT device measurement coming from the **Temperature Sensor** device `temperature001`, by
 making the following request
@@ -747,8 +768,8 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 ```
 
 As you can see, the Entity type and `static_attributes` from the service group have been copied over to the entity in
-the context broker, however since the measure `{"c": 1}` does not have a mapping, the name of the Property has been copied
-directly from the received measure.
+the context broker, however since the measure `{"c": 1}` does not have a mapping, the name of the Property has been
+copied directly from the received measure.
 
 ### Provisioning an Actuator
 
@@ -1232,8 +1253,8 @@ curl -iX PUT \
 
 This example removes a provisioned service group by making a DELETE request to the `/iot/services/` endpoint.
 
-It means that requests to `http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov` (where the IoT Agent
-is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
+It means that requests to `http://iot-agent:7896/iot/json?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov` (where the IoT
+Agent is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
 `resource` parameters must be supplied in order to identify the service group to be deleted.
 
 #### :two::one: Request:
