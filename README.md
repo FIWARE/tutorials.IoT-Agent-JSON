@@ -206,8 +206,8 @@ Therefore the overall architecture will consist of the following elements:
     -   Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
         registrations
     -   Used by the **IoT Agent** to hold device information such as device URLs and Keys
+-   An HTTP **Web-Server** which offers static `@context` files defining the context entities within the system.
 -   The **Tutorial Application** does the following:
-    -   Offers static `@context` files defining the context entities within the system.
     -   Acts as set of dummy [agricultural IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD)
         using the
         [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
@@ -245,7 +245,7 @@ tutorial:
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
         - "DUMMY_DEVICES_PAYLOAD=JSON"
-        - "IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld"
+        - "IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld"
 ```
 
 The `tutorial` container is listening on two ports:
@@ -266,7 +266,7 @@ The `tutorial` container is driven by environment variables as shown:
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov`                          | Random security key used for JSON interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
 | DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | The transport protocol used by the dummy IoT devices                                                                                |
 | DUMMY_DEVICES_PAYLOAD   | `JSON`                                                | The payload format used by the dummy IoT devices                                                                                    |
-| IOTA_JSON_LD_CONTEXT    | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                           |
+| IOTA_JSON_LD_CONTEXT    | `http://context/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                           |
 
 The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
@@ -306,7 +306,7 @@ iot-agent:
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
         - IOTA_DEFAULT_RESOURCE=/iot/json
-        - IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld
+        - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
         - IOTA_FALLBACK_TENANT=openiot
 ```
 
@@ -334,7 +334,7 @@ The `iot-agent` container is driven by environment variables as shown:
 | IOTA_MONGO_DB        | `iotagentul`                                          | The name of the database used in mongoDB                                                                                                              |
 | IOTA_HTTP_PORT       | `7896`                                                | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041`                               | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
-| IOTA_JSON_LD_CONTEXT | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                                             |
+| IOTA_JSON_LD_CONTEXT | `http://context/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                                             |
 | IOTA_FALLBACK_TENANT | `openiot`                                             | The tenant to use if no explicit tenant has been received from communications                                                                         |
 
 # Prerequisites
@@ -686,7 +686,7 @@ add the `fiware-service` and `fiware-service-path` headers.
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -d 'attrs=temperature'
 ```
 
@@ -694,7 +694,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 ```jsonld
 {
-    "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
+    "@context": "http://context/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
     "temperature": {
@@ -737,7 +737,7 @@ based on the knowledge of the service group
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'NGSILD-Path: /' \
--H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### Response:
@@ -745,7 +745,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 ```jsonld
 [
     {
-        "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
+        "@context": "http://context/ngsi-context.jsonld",
         "id": "urn:ngsi-ld:Device:motion003",
         "type": "Device",
         "c": {
@@ -845,7 +845,7 @@ The result of the command to turn on the irrigation system can be read by queryi
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
 ```
 
@@ -1014,7 +1014,7 @@ To invoke the `on` command, the `on` attribute must be updated in the context.
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
--H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1037,7 +1037,7 @@ To invoke the `start` command, the `start` attribute must be updated in the cont
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1056,7 +1056,7 @@ Change the state of the **Fillling System**, the `add` attribute must be updated
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",

@@ -2,7 +2,7 @@
 #
 #  Command Line Interface to start all services associated with the Getting-Started Tutorial
 #
-#  For this tutorial the commands are merely a convenience script to run docker-compose
+#  For this tutorial the commands are merely a convenience script to run docker compose
 #
 
 set -e
@@ -10,9 +10,14 @@ set -e
 SCORPIO="http://scorpio:9090/scorpio/v1/info/"
 ORION="http://orion:1026/version"
 IOT_AGENT="http://iot-agent:4041/version"
-CONTEXT="http://context-provider:3000/data-models/ngsi-context.jsonld"
+CONTEXT="http://context/ngsi-context.jsonld"
 
-if (( $# != 1 )); then
+dockerCmd="docker compose"
+if (( $# == 2 )); then
+    dockerCmd="docker-compose"
+fi
+
+if (( $# < 1 )); then
 	echo "Illegal number of parameters"
 	echo "usage: services [create|orion|scorpio|stop]"
 	exit 1
@@ -140,8 +145,8 @@ addIoTDatabaseIndex () {
 
 stoppingContainers () {
 	echo "Stopping containers"
-	docker-compose --log-level ERROR -f docker-compose/orion-ld.yml -p fiware down -v --remove-orphans
-	docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml -p fiware down -v --remove-orphans
+	${dockerCmd} -f docker-compose/orion-ld.yml down -v --remove-orphans
+	${dockerCmd} -f docker-compose/scorpio-aaio.yml down -v --remove-orphans
 }
 
 displayServices () {
@@ -158,12 +163,12 @@ case "${command}" in
 	"orion")
 		export $(cat .env | grep "#" -v)
 		stoppingContainers
-		echo -e "Starting four containers \033[1;34mOrion\033[0m, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
+		echo -e "Starting containers:  \033[1;34mOrion\033[0m, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m, a linked data \033[1mContext\033[0m and a \033[1mMongoDB\033[0m database."
 		echo -e "- \033[1;34mOrion\033[0m is the context broker"
 		echo -e "- \033[1;36mIoT-Agent\033[0m is configured for the JSON Protocol"
 		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over HTTP"
 		echo ""
-		docker-compose --log-level ERROR -f docker-compose/orion-ld.yml -p fiware up -d --remove-orphans
+		${dockerCmd} -f docker-compose/orion-ld.yml up -d --remove-orphans
 		waitForMongo
 		addDatabaseIndex
 		addIoTDatabaseIndex
@@ -176,12 +181,12 @@ case "${command}" in
 	"scorpio")
 		export $(cat .env | grep "#" -v)
 		stoppingContainers
-		echo -e "Starting seven containers \033[1;34mScorpio\033[0m, \033[1mKafka\033[0m, \033[1mZookeeper\033[0m and a \033[1mPostgres\033[0m database, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
+		echo -e "Starting eight containers \033[1;34mScorpio\033[0m, \033[1mKafka\033[0m, \033[1mZookeeper\033[0m and a \033[1mPostgres\033[0m database, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
 		echo -e "- \033[1;34mScorpio\033[0m is the context broker"
 		echo -e "- \033[1;36mIoT-Agent\033[0m is configured for the JSON Protocol"
 		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over HTTP"
 		echo ""
-		docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml -p fiware up -d --remove-orphans
+		${dockerCmd} -f docker-compose/scorpio-aaio.yml up -d --remove-orphans
 		waitForMongo
 		addIoTDatabaseIndex
 		displayServices fiware
@@ -196,14 +201,14 @@ case "${command}" in
 		;;
 	"start")
 		export $(cat .env | grep "#" -v)
-		./services orion
+		./services orion $2
 		;;
 	"create")
 		export $(cat .env | grep "#" -v)
 		echo "Pulling Docker images"
 		docker pull curlimages/curl
-		docker-compose --log-level ERROR -f docker-compose/orion-ld.yml pull
-		docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml pull
+		${dockerCmd} -f docker-compose/orion-ld.yml pull
+		${dockerCmd} -f docker-compose/scorpio-aaio.yml pull
 		;;
 	*)
 		echo "Command not Found."
