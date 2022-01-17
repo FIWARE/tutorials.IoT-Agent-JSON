@@ -375,8 +375,8 @@ Before you start you should ensure that you have obtained or built the necessary
 repository and create the necessary images by running the commands as shown:
 
 ```console
-git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
-cd tutorials.IoT-Agent
+git clone https://github.com/FIWARE/tutorials.IoT-Agent-JSON.git
+cd tutorials.IoT-Agent-JSON
 git checkout NGSI-LD
 
 ./services create
@@ -387,8 +387,8 @@ Thereafter, all services can be initialized from the command-line by running the
 repository:
 
 ```console
-git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
-cd tutorials.IoT-Agent
+git clone https://github.com/FIWARE/tutorials.IoT-Agent-JSON.git
+cd tutorials.IoT-Agent-JSON
 git checkout NGSI-LD
 
 ./services orion|scorpio
