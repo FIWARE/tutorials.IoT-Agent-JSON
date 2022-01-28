@@ -16,10 +16,12 @@
 # 
 # see: https://github.com/FIWARE/helm-charts/
 #
-version: "3.5"
+version: "3.8"
 services:
   # Orion is the context broker
   orion:
+    labels:
+      org.fiware: 'tutorial'
     image: fiware/orion:${ORION_VERSION}
     hostname: orion
     container_name: fiware-orion
@@ -57,6 +59,7 @@ services:
       - IOTA_NORTH_PORT=${IOTA_NORTH_PORT}
       - IOTA_REGISTRY_TYPE=mongodb #Whether to hold IoT device info in memory or in a database
       - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
+      - IOTA_DEFAULT_EXPRESSION_LANGUAGE=jexl
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_CB_NGSI_VERSION=v2 # use NGSIv2 when sending updates for active attributes
       - IOTA_AUTOCAST=true # Ensure Ultralight number values are read as numbers not strings
@@ -72,6 +75,8 @@ services:
 
   # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
+    labels:
+      org.fiware: 'tutorial'
     image: fiware/tutorials.context-provider
     hostname: iot-sensors
     container_name: fiware-tutorial
@@ -107,6 +112,8 @@ services:
 
   # Database
   mongo-db:
+    labels:
+      org.fiware: 'tutorial'
     image: mongo:${MONGO_DB_VERSION}
     hostname: mongo-db
     container_name: db-mongo
@@ -126,6 +133,8 @@ services:
     
 networks:
   default:
+    labels:
+      org.fiware: 'tutorial'
     ipam:
       config:
         - subnet: 172.18.1.0/24
