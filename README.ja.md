@@ -4,7 +4,6 @@
 [![FIWARE IoT Agents](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
 [![Support badge](https://img.shields.io/badge/tag-fiware-orange.svg?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/fiware)
-
 [![JSON](https://img.shields.io/badge/Payload-JSON-f06f38.svg)](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
@@ -374,22 +373,22 @@ iot-agent:
 
 `iot-agent` コンテナは、次のように環境変数によって駆動されます:
 
-| キー                 | 値                      | 説明                                                                                                                                  :|
-| -------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| IOTA_CB_HOST         | `orion`                 | コンテキストを更新するContext Broker のホスト名                                                                                       |
-| IOTA_CB_PORT         | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                       |
-| IOTA_NORTH_PORT      | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                  |
-| IOTA_REGISTRY_TYPE   | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうか                                                                         |
-| IOTA_LOG_LEVEL       | `debug`                 | IoT Agent のログ・レベル                                                                                                              |
-| IOTA_TIMESTAMP       | `true`                  | 接続デバイスから受信した各測定値にタイムスタンプ情報を提供するかどうか                                                                |
-| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信する際に NGSI v2 を使用するかどうか                                                                       |
-| IOTA_AUTOCAST        | `true`                  | JSON の数値が文字列ではなく数値として読み取られるようにする                                                                           |
-| IOTA_MONGO_HOST      | `context-db`            | mongoDB のホスト名 - デバイス情報の保持に使用                                                                                         |
-| IOTA_MONGO_PORT      | `27017`                 | mongoDB がリッスンしているポート                                                                                                      |
-| IOTA_MONGO_DB        | `iotagentjson`          | mongoDB で使用されるデータベースの名前                                                                                                |
-| IOTA_HTTP_PORT       | `7896`                  | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                               |
-| IOTA_PROVIDER_URL    | `http://iot-agent:4041` | コマンドの登録時に Context Broker に渡される URL。ContextBroker がコマンドをデバイスに発行するときに転送 URL の場所として使用されます |
-| IOTA_DEFAULT_RESOURCE| `/iot/json`             | IoT Agent が JSON 測定値のリッスンを使用するデフォルトのパス                                                                          |
+| キー                  | 値                      | 説明                                                                                                                                  |
+| --------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| IOTA_CB_HOST          | `orion`                 | コンテキストを更新するContext Broker のホスト名                                                                                       |
+| IOTA_CB_PORT          | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                       |
+| IOTA_NORTH_PORT       | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                  |
+| IOTA_REGISTRY_TYPE    | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうか                                                                         |
+| IOTA_LOG_LEVEL        | `debug`                 | IoT Agent のログ・レベル                                                                                                              |
+| IOTA_TIMESTAMP        | `true`                  | 接続デバイスから受信した各測定値にタイムスタンプ情報を提供するかどうか                                                                |
+| IOTA_CB_NGSI_VERSION  | `v2`                    | アクティブな属性の更新を送信する際に NGSI v2 を使用するかどうか                                                                       |
+| IOTA_AUTOCAST         | `true`                  | JSON の数値が文字列ではなく数値として読み取られるようにする                                                                           |
+| IOTA_MONGO_HOST       | `context-db`            | mongoDB のホスト名 - デバイス情報の保持に使用                                                                                         |
+| IOTA_MONGO_PORT       | `27017`                 | mongoDB がリッスンしているポート                                                                                                      |
+| IOTA_MONGO_DB         | `iotagentjson`          | mongoDB で使用されるデータベースの名前                                                                                                |
+| IOTA_HTTP_PORT        | `7896`                  | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                               |
+| IOTA_PROVIDER_URL     | `http://iot-agent:4041` | コマンドの登録時に Context Broker に渡される URL。ContextBroker がコマンドをデバイスに発行するときに転送 URL の場所として使用されます |
+| IOTA_DEFAULT_RESOURCE | `/iot/json`             | IoT Agent が JSON 測定値のリッスンを使用するデフォルトのパス                                                                          |
 
 <a name="prerequisites"></a>
 
@@ -429,7 +428,7 @@ docker-compose -v
 docker version
 ```
 
-Docker バージョン 18.03 以降と Docker Compose 1.29 以上を使用していることを確認
+Docker バージョン 20.10 以降と Docker Compose 1.29 以上を使用していることを確認
 し、必要に応じてアップグレードしてください。
 
 <a name="cygwin-for-windows"></a>
@@ -688,6 +687,27 @@ curl -iX POST \
 関連付け、デバイスが読み取った `c` をコンテキスト属性 `count` (`Integer`
 として定義) にマッピングしています。`refStore` は `static_attribute` として
 定義され、デバイスを **ストア** `urn:ngsi-ld:Store:001` 内に配置します。
+
+> 静的属性は、`q` パラメータを使用したクエリを有効にするエンティティの追加データとして役立ちます。たとえば、Smart
+> Data Models [Device](https://github.com/smart-data-models/dataModel.Device/blob/master/Device/doc/spec.md) モデルは、
+> 次のようにクエリを実行できるようにする `category` や `ControlledProperty` などの属性を定義します:
+>
+> -   _現在どの **Actuators** の `batteryLevel` が低いですか？_
+>
+> `/v2/entities?q=category=="actuator";batteryLevel<0.1`
+>
+> -   _2020年1月より前にインストールされた `fillingLevel` を測定する **Devices** はどれですか？_
+>
+> `/v2/entities?q=controlledProperty=="fillingLevel";dateInstalled<"2020-01-25T00:00:00.000Z"`
+>
+> 明らかに、静的データは必要に応じて拡張でき、エンティティ ID がクエリに対して柔軟性がない場合は、デバイスごとに一意の
+> `name ` や `serialNumber` などの追加データを含めることもできます。
+>
+> `/v2/entities?q=serialNumber=="XS403001-002"`
+>
+> さらに、固定の `location` 静的属性を持つデバイスは、ジオフェンス・パラメータを使用してクエリすることもできます。
+>
+> `/v2/entities?georel=near;maxDistance:1500&geometry=point&coords=52.5162,13.3777`
 
 次のリクエストを行うことで、**Motion Sensor** デバイス `motion001` からの
 ダミー IoT デバイスの測定値をシミュレートできます。
@@ -1088,10 +1108,10 @@ curl -iX PATCH \
 高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか
 ？このシリーズ
 の[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見
-つけることができます :
+つけることができます
 
 ---
 
 ## ライセンス
 
-[MIT](LICENSE) © 2018-2020 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2018-2022 FIWARE Foundation e.V.
