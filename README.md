@@ -97,7 +97,7 @@ A direct comparison of the two IoT Agents can be seen below:
 | Sample Command `Robot1@turn\|left`                                  | Sample Command `{"Robot1": {"turn": "left"}}`                       | Message Payload            |
 | Content Type is `text/plain`                                        | Content Type is `application/json`                                  | Message Payload            |
 | Offers 3 transports - HTTP, MQTT and AMPQ                           | Offers 3 transports - HTTP, MQTT and AMPQ                           | Transport Mechanism        |
-| HTTP listens for measures on `iot/d` by default                     | HTTP listens for measures on `iot/json` by default                  | Transport Mechanism        |
+| HTTP listens for measures on `iot/json` by default                     | HTTP listens for measures on `iot/json` by default                  | Transport Mechanism        |
 | HTTP devices are identified by parameters `?i=XXX&k=YYY`            | HTTP devices are identified by parameters `?i=XXX&k=YYY`            | Device Identification      |
 | HTTP commands posted to a well-known URL - response is in the reply | HTTP commands posted to a well-known URL - response is in the reply | Communications Handshake   |
 | MQTT devices are identified by the path of the topic `/XXX/YYY`     | MQTT devices are identified by the path of the topic `/XXX/YYY`     | Device Identification      |
@@ -524,7 +524,7 @@ curl -iX POST 'http://localhost:4041/iot/services' \
             "apikey": "4jggokgpepnvsb2uv4s40d59ov",
             "cbroker": "http://orion:1026",
             "entity_type": "Device",
-            "resource": "/iot/d",
+            "resource": "/iot/json",
             "attributes": [
                 {
                     "object_id": "bpm", "type": "Property", "name": "heartRate",
@@ -1113,7 +1113,7 @@ parameter.
 
 ```console
 curl -X GET \
-  'http://localhost:4041/iot/services?resource=/iot/d' \
+  'http://localhost:4041/iot/services?resource=/iot/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -1151,7 +1151,7 @@ curl -X GET \
                 }
             ],
             "_id": "5f5f8ad8eed02a000687dec5",
-            "resource": "/iot/d",
+            "resource": "/iot/json",
             "apikey": "4jggokgpepnvsb2uv4s40d59ov",
             "service": "openiot",
             "subservice": "/",
@@ -1213,7 +1213,7 @@ curl -X GET \
                 }
             ],
             "_id": "5f5f8ad8eed02a000687dec5",
-            "resource": "/iot/d",
+            "resource": "/iot/json",
             "apikey": "4jggokgpepnvsb2uv4s40d59ov",
             "service": "openiot",
             "subservice": "/",
@@ -1240,7 +1240,7 @@ and `apikey` parameters.
 
 ```console
 curl -iX PUT \
-  'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services?resource=/iot/json&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -1261,7 +1261,7 @@ Agent is listening for **Northbound** communications) should no longer be proces
 
 ```console
 curl -iX DELETE \
-  'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services/?resource=/iot/json?apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
