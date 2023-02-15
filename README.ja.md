@@ -1,4 +1,4 @@
-# IoT Agents - JSON [<img src="https://img.shields.io/badge/NGSI-LD-d6604d.svg" width="90"  align="left" />](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)[<img src="https://fiware.github.io/tutorials.IoT-Agent-JSON/img/fiware.png" align="left" width="162">](https://www.fiware.org/)<br/>
+# IoT Agents - JSON [<img src="https://img.shields.io/badge/NGSI-LD-d6604d.svg" width="90"  align="left" />](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf)[<img src="https://fiware.github.io/tutorials.IoT-Agent-JSON/img/fiware.png" align="left" width="162">](https://www.fiware.org/)<br/>
 
 [![FIWARE IoT Agents](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
@@ -11,7 +11,7 @@
 [JSON 用の IoT Agent](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 を使用して、ダミーの [JSON](https://json.org/) ベースの IoT デバイスを接続し、
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) などの NGSI-LD 準拠の Context Broker
-に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf) リクエストを使用して、
+に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf) リクエストを使用して、
 測定値を読み取ったり、コマンドを送信したりできるようにします。
 
 チュートリアルでは [cUrl](https://ec.haxx.se/) コマンドを使用しますが、
@@ -595,7 +595,7 @@ Broker URL を使用しますが、完全を期すために、ここに含まれ
 
 ### センサのプロビジョニング
 
-NGSI-LD [仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf) では、
+NGSI-LD [仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf) では、
 コンテキスト・データ・エンティティを作成するときに完全な URN が義務付けられていますが、デバイスからの着信メッセージはこの
 規則を認識しません。さらに、コンテキスト・データ・エンティティの属性名は、関連付けられた `@context` ファイル内にある短い名前
 と一致する必要があります。これらのマッピングは、以前のリクエストで見たようにサービス・グループ・レベルで定義することも、
