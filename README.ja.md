@@ -231,7 +231,7 @@ IoT デバイスと IoT Agent を接続するために必要な設定情報は�
 
 ```yaml
 tutorial:
-    image: fiware/tutorials.ngsi-ld
+    image: quay.io/fiware/tutorials.ngsi-ld
     hostname: iot-sensors
     container_name: fiware-tutorial
     networks:
@@ -286,7 +286,7 @@ YAML ファイルで説明されている他の `tutorial` コンテナ設定値
 
 ```yaml
 iot-agent:
-    image: fiware/iotagent-json:latest
+    image: quay.io/fiware/iotagent-json:latest
     hostname: iot-agent
     container_name: fiware-iot-agent
     depends_on:
