@@ -259,7 +259,7 @@ case "${command}" in
 		addIoTDatabaseIndex
 		displayServices fiware
 		waitForStellio
-		export CONTEXT_BROKER=stellio:9090
+		export CONTEXT_BROKER=stellio:8080
 		loadData
 		waitForIoTAgent
 		;;
