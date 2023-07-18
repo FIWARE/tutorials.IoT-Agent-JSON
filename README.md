@@ -1097,7 +1097,7 @@ curl -iX POST \
      "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
      "cbroker":     "http://orion:1026",
      "entity_type": "Thing",
-     "resource":    "/iot/d"
+     "resource":    "/iot/json"
    }
  ]
 }'
