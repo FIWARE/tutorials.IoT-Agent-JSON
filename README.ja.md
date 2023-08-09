@@ -406,7 +406,7 @@ git clone https://github.com/FIWARE/tutorials.IoT-Agent-JSON.git
 cd tutorials.IoT-Agent-JSON
 git checkout NGSI-LD
 
-./services orion|scorpio
+./services [orion|scorpio|stellio]
 ```
 
 > :information_source: **注:** クリーンアップしてやり直す場合は、次のコマンドを使用します:
