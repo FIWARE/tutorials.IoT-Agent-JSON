@@ -56,6 +56,8 @@ services:
 
   # IoT-Agent is configured for the JSON Protocol
   iot-agent:
+    labels:
+      org.fiware: 'tutorial'
     image: quay.io/fiware/iotagent-json:${JSON_VERSION}
     hostname: iot-agent
     container_name: fiware-iot-agent
