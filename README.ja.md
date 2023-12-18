@@ -433,7 +433,7 @@ git checkout NGSI-LD
 
 公開されたポートに HTTP リクエストを行うことで、IoT Agent が実行されているかどうかを確認できます。
 
-#### :one: リクエスト:
+#### 1️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -531,7 +531,7 @@ Agent は最初に Context Broker がレスポンスしている URL を認識�
 この例では、デバイスの匿名グループをプロビジョニングします。IoT Agent に、一連のデバイスが `IOTA_HTTP_PORT` (IoT Agent
 が **Northbound** 通信をリッスンしているポート) にメッセージを送信することを伝えます。
 
-#### :two: リクエスト:
+#### 2️⃣ リクエスト:
 
 ```console
 curl -iX POST 'http://localhost:4041/iot/services' \
@@ -611,7 +611,7 @@ NGSI-LD [仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_6
 > **注**: 個々の `id` が不要な場合、または集約データで十分な場合、
 > `attributes` は個別ではなくプロビジョニング・サービス内で定義できます
 
-#### :three: リクエスト:
+#### 3️⃣ リクエスト:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -679,7 +679,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 次のリクエストを行うことで、**Temperature Sensor** デバイス `temperature001` からのダミー IoT デバイス測定をシミュレート
 できます。
 
-#### :four: リクエスト:
+#### 4️⃣ リクエスト:
 
 ```console
 curl -L -X POST 'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=temperature001' \
@@ -700,7 +700,7 @@ curl -L -X POST 'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=t
 Context Broker からエンティティのデータを取得することで、測定値が記録されたことを確認できます。`fiware-service` と
 `fiware-service-path` ヘッダを追加することを忘れないでください。
 
-#### :five: リクエスト:
+#### 5️⃣ リクエスト:
 
 ```console
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
@@ -738,7 +738,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 たとえば、`/iot/json` エンドポイントへのこのリクエストについて考えてみます:
 
-#### :six: リクエスト:
+#### 6️⃣ リクエスト:
 
 ```console
 curl -iX POST 'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=motion003' \
@@ -749,7 +749,7 @@ curl -iX POST 'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=mot
 リソース・エンドポイントは以前にサービス・グループ内で定義されており、API キーが一致するため、これは有効な測定値として認識
 され、サービス・グループの知識に基づいてマッピングされた属性を持つ新しいエンティティが Context Broker に作成されます。
 
-#### :seven: リクエスト:
+#### 7️⃣ リクエスト:
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
@@ -797,7 +797,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 以下の例では、`deviceId=water001` で water をプロビジョニングします。エンドポイントは `http://iot-sensors:3001/iot/water001`
 であり、`on` と `off` コマンドを受け入れることができます。`transport=HTTP` 属性は、使用される通信プロトコルを定義します。
 
-#### :eight: リクエスト:
+#### 8️⃣ リクエスト:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -835,7 +835,7 @@ Context Broker を接続する前に、`/ngsi-ld/v1/entities/` エンドポイ�
 リクエストを行うことで、コマンドをデバイスに送信できることをテストできます。このエンドポイントは、接続すると Context
 Broker によって最終的に呼び出されます。設定をテストするには、次のようにコマンドを直接実行できます:
 
-#### :nine: リクエスト:
+#### 9️⃣ リクエスト:
 
 ```console
 curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
@@ -857,7 +857,7 @@ curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 Irrigation system をオンにするコマンドの結果は、Context Broker 内のエンティティをクエリすることで読み取ることが
 できます。
 
-#### :one::zero: リクエスト:
+#### 1️⃣0️⃣ リクエスト:
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
@@ -914,7 +914,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
 コマンドと測定の両方を提供するデバイスのプロビジョニングは、リクエストのボディに `attributes` 属性と `command` 属性の両方を
 含む HTTP POST リクエストを作成するだけです。
 
-#### :one::one: リクエスト:
+#### 1️⃣1️⃣ リクエスト:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -972,7 +972,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 
 同様に、2つのコマンド (`start` と `stop`) と2つの属性を持つ **Tractor** は、次のようにプロビジョニングできます。
 
-#### :one::two: リクエスト:
+#### 1️⃣2️⃣ リクエスト:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -1005,7 +1005,7 @@ Tractor からの測定値 (例: `gps`) は、サービス・グループ内で�
 
 プロビジョニングされたデバイスの完全なリストは、`/iot/devices` エンドポイントに GET リクエストを行うことで取得できます。
 
-#### :one::three: リクエスト:
+#### 1️⃣3️⃣ リクエスト:
 
 ```console
 curl -L -X GET 'http://localhost:4041/iot/devices' \
@@ -1032,7 +1032,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 
 `on` コマンドを呼び出すには、コンテキストで `on` 属性を更新する必要があります。
 
-#### :one::four: リクエスト:
+#### 1️⃣4️⃣ リクエスト:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
@@ -1057,7 +1057,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 
 `start` コマンドを呼び出すには、コンテキストで `start` 属性を更新する必要があります。
 
-#### :one::five: リクエスト:
+#### 1️⃣5️⃣ リクエスト:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
@@ -1078,7 +1078,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:t
 
 **Fillling System** の状態を変更するには、コンテキストで `add` 属性を更新する必要があります。
 
-#### :one::six: リクエスト:
+#### 1️⃣6️⃣ リクエスト:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
@@ -1114,7 +1114,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:f
 この例では、デバイスの匿名グループをプロビジョニングします。一連のデバイスが `IOTA_HTTP_PORT` (IoT Agent が **ノースバウンド**
 通信をリッスンしている場所) にメッセージを送信することを IoT Agent に通知します。
 
-#### :one::seven: リクエスト:
+#### 1️⃣7️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -1143,7 +1143,7 @@ curl -iX POST \
 サービス・グループの詳細は、`/iot/services` エンドポイントに対して GET リクエストを行い、`resource` パラメータを指定すること
 で読み取ることができます。
 
-#### :one::eight: リクエスト:
+#### 1️⃣8️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -1208,7 +1208,7 @@ curl -X GET \
 この例では、`/iot/services` エンドポイントに対して GET リクエストを行うことにより、プロビジョニングされたすべてのサービスを
 一覧表示します。
 
-#### :one::nine: リクエスト:
+#### 1️⃣9️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -1275,7 +1275,7 @@ curl -X GET \
 サービス・グループの詳細は、`/iot/services` エンドポイントに PUT リクエストを行い、`resource` および `apikey` パラメータを
 提供することで更新できます。
 
-#### :two::zero: リクエスト:
+#### 2️⃣0️⃣ リクエスト:
 
 ```console
 curl -iX PUT \
@@ -1299,7 +1299,7 @@ curl -iX PUT \
 リッスンしている場所) へのリクエストが、IoT Agent によって処理されないことを意味します。削除するサービス・グループを識別する
 には、`apiKey` パラメータと `resource` パラメータを指定する必要があります。
 
-#### :two::one: リクエスト:
+#### 2️⃣1️⃣ リクエスト:
 
 ```console
 curl -iX DELETE \
@@ -1331,7 +1331,7 @@ curl -iX DELETE \
 を使用して `http://iot-sensors:3001/iot/water002` をリッスンしていることを通知されました。`attributes`, `lazy` 属性および
 `static_attributes` もプロビジョニングできます。
 
-#### :two::two: リクエスト:
+#### 2️⃣2️⃣ リクエスト:
 
 ```console
 curl -iX POST 'http://localhost:4041/iot/devices' \
@@ -1375,7 +1375,7 @@ curl -iX POST 'http://localhost:4041/iot/devices' \
 プロビジョニングされたデバイスの詳細は、`/iot/devices/<device-id>` エンドポイントに対して GET リクエストを行うことで
 読み取ることができます。
 
-#### :two::three: リクエスト:
+#### 2️⃣3️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -1430,7 +1430,7 @@ curl -X GET \
 この例では、`/iot/devices` エンドポイントに対して GET リクエストを行うことにより、プロビジョニングされたすべてのデバイスを
 一覧表示します。
 
-#### :two::four: リクエスト:
+#### 2️⃣4️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -1485,7 +1485,7 @@ curl -X GET \
 この例では、`/iot/devices/<device-id>` エンドポイントに PUT リクエストを送信することにより、既存のプロビジョニングされた
 デバイスを更新します。
 
-#### :two::five: リクエスト:
+#### 2️⃣5️⃣ リクエスト:
 
 ```console
 curl -iX PUT \
@@ -1508,7 +1508,7 @@ curl -iX PUT \
 デバイス属性はマップされなくなり、コマンドをデバイスに送信できなくなります。デバイスがアクティブな測定を行っている場合でも、
 関連するサービスが削除されていなければ、デフォルト値で処理されます。
 
-#### :two::six: リクエスト:
+#### 2️⃣6️⃣ リクエスト:
 
 ```console
 curl -iX DELETE \
