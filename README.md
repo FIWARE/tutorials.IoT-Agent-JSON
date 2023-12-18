@@ -408,7 +408,7 @@ The device monitor can be found at: `http://localhost:3000/device/monitor`
 
 You can check if the IoT Agent is running by making an HTTP request to the exposed port:
 
-#### :one: Request:
+#### 1️⃣ Request:
 
 ```console
 curl -X GET \
@@ -494,7 +494,7 @@ within this tutorial as we will be provisioning each device separately.
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices will be sending
 messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
 
-#### :two: Request:
+#### 2️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -549,7 +549,7 @@ Three types of measurement attributes can be provisioned:
 > **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
 > be defined within the provisioning service rather than individually.
 
-#### :three: Request:
+#### 3️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -604,7 +604,7 @@ reading `c` with the context attribute `count` (which is defined as an `Integer`
 You can simulate a dummy IoT device measurement coming from the **Motion Sensor** device `motion001`, by making the
 following request
 
-#### :four: Request:
+#### 4️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -627,7 +627,7 @@ raising a request with the Orion Context Broker.
 You can see that a measurement has been recorded, by retrieving the entity data from the context broker. Don't forget to
 add the `fiware-service` and `fiware-service-path` headers.
 
-#### :five: Request:
+#### 5️⃣ Request:
 
 ```console
 curl -X GET \
@@ -686,7 +686,7 @@ invoked. The example below provisions a bell with the `deviceId=bell001`. The en
 `http://iot-sensors:3001/iot/bell001` and it can accept the `ring` command. The `transport=HTTP` attribute defines the
 communications protocol to be used.
 
-#### :six: Request:
+#### 6️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -719,7 +719,7 @@ directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is
 invoked by the context broker once we have connected it up. To test the configuration you can run the command directly
 as shown:
 
-#### :seven: Request:
+#### 7️⃣  Request:
 
 ```console
 curl -iX POST \
@@ -748,7 +748,7 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker.
 
-#### :eight: Request:
+#### 8️⃣  Request:
 
 ```console
 curl -X GET \
@@ -782,7 +782,7 @@ parsing NGSI to JSON is delegated to the IoT Agent itself. Provisioning a device
 measurements is merely a matter of making an HTTP POST request with both `attributes` and `command` attributes in the
 body of the request.
 
-#### :nine: Request:
+#### 9️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -820,7 +820,7 @@ curl -iX POST \
 
 Similarly, a **Smart Lamp** with two commands (`on` and `off`) and two attributes can be provisioned as follows:
 
-#### :one::zero: Request:
+#### 1️⃣0️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -855,7 +855,7 @@ curl -iX POST \
 
 The full list of provisioned devices can be obtained by making a GET request to the `/iot/devices` endpoint.
 
-#### :one::one: Request:
+#### 1️⃣1️⃣ Request:
 
 ```console
 curl -X GET \
@@ -886,7 +886,7 @@ Therefore this section of registering and invoking commands **duplicates** the i
 
 To invoke the `ring` command, the `ring` attribute must be updated in the context.
 
-#### :one::two: Request:
+#### 1️⃣2️⃣ Request:
 
 ```console
 curl -iX PATCH \
@@ -910,7 +910,7 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 To invoke the `open` command, the `open` attribute must be updated in the context.
 
-#### :one::three: Request:
+#### 1️⃣3️⃣ Request:
 
 ```console
 curl -iX PATCH \
@@ -930,7 +930,7 @@ curl -iX PATCH \
 
 To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.
 
-#### :one::four: Request:
+#### 1️⃣4️⃣ Request:
 
 ```console
 curl -iX PATCH \

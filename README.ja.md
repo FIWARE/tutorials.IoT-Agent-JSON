@@ -490,7 +490,7 @@ Bash スクリプトを実行することによって、コマンドラインか
 公開されたポートに HTTP リクエストを行うことで、IoT Agent が実行されているか
 どうかを確認できます。
 
-#### :one: リクエスト:
+#### 1️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -594,7 +594,7 @@ IoT Agent は提供された `<device-id>` を使用してこれをコンテキ�
 一連のデバイスが `IOTA_HTTP_PORT` (IoT Agent が **Northbound **通信を
 リッスンしているポート) にメッセージを送信することを伝えます。
 
-#### :two: リクエスト:
+#### 2️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -657,7 +657,7 @@ NGSI-LD [仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_6
 > **注**: 個々の `id` が不要な場合、または集約データで十分な場合、
 > `attributes` は個別ではなくプロビジョニング・サービス内で定義できます
 
-#### :three: リクエスト:
+#### 3️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -713,7 +713,7 @@ curl -iX POST \
 次のリクエストを行うことで、**Motion Sensor** デバイス `motion001` からの
 ダミー IoT デバイスの測定値をシミュレートできます。
 
-#### :four: リクエスト:
+#### 4️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -739,7 +739,7 @@ Context Broker からエンティティのデータを取得することで、�
 ことを確認できます。`fiware-service` と `fiware-service-path` ヘッダを
 追加することを忘れないでください。
 
-#### :five: リクエスト:
+#### 5️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -804,7 +804,7 @@ curl -X GET \
 は `http://iot-sensors:3001/iot/bell001` であり、`ring` コマンドを受け入れる
 ことができます。`transport=HTTP` 属性は、使用される通信プロトコルを定義します。
 
-#### :six: リクエスト:
+#### 6️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -838,7 +838,7 @@ IoT Agent のノースポートに直接 REST リクエストを行うことで�
 Context Broker によって最終的に呼び出されます。設定をテストするには、次のよう
 にコマンドを直接実行できます:
 
-#### :seven: リクエスト:
+#### 7️⃣  リクエスト:
 
 ```console
 curl -iX POST \
@@ -868,7 +868,7 @@ curl -iX POST \
 ベルを鳴らすコマンドの結果は、Orion Context Broker 内のエンティティをクエリ
 することで読み取ることができます。
 
-#### :eight: リクエスト:
+#### 8️⃣  リクエスト:
 
 ```console
 curl -X GET \
@@ -906,7 +906,7 @@ IoT Agent 自体に委任されます。コマンドと測定値の両方を提�
 プロビジョニングは、リクエストの本文に `attributes` と `command` の両方の属性
 を指定して HTTP POST リクエストを行うだけです。
 
-#### :nine: リクエスト:
+#### 9️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -947,7 +947,7 @@ curl -iX POST \
 同様に、2つのコマンド (`on` と `off`) と2つの属性を持つ**Smart Lamp**
 は、次のようにプロビジョニングできます。
 
-#### :one::zero: リクエスト:
+#### 1️⃣0️⃣ リクエスト:
 
 ```console
 curl -iX POST \
@@ -983,7 +983,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの完全なリストは、`/iot/devices`
 エンドポイントに GET リクエストを行うことで取得できます。
 
-#### :one::one: リクエスト:
+#### 1️⃣1️⃣ リクエスト:
 
 ```console
 curl -X GET \
@@ -1023,7 +1023,7 @@ IoT Agent のノース・ポートを出入りするすべての通信は、標�
 `ring` コマンドを呼び出すには、コンテキストで` ring` 属性を更新する必要が
 あります。
 
-#### :one::two: リクエスト:
+#### 1️⃣2️⃣ リクエスト:
 
 ```console
 curl -iX PATCH \
@@ -1050,7 +1050,7 @@ curl -iX PATCH \
 `open` コマンドを呼び出すには、コンテキストで `open` 属性を更新する必要が
 あります。
 
-#### :one::three: リクエスト:
+#### 1️⃣3️⃣ リクエスト:
 
 ```console
 curl -iX PATCH \
@@ -1072,7 +1072,7 @@ curl -iX PATCH \
 **Smart Lamp** をオンにするには、コンテキストで `on` 属性を更新する必要が
 あります。
 
-#### :one::four: リクエスト:
+#### 1️⃣4️⃣ リクエスト:
 
 ```console
 curl -iX PATCH \
