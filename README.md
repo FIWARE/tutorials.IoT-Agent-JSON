@@ -547,7 +547,8 @@ Three types of measurement attributes can be provisioned:
 -   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the
     context broker.
 
-> **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
+> [!NOTE]
+>  In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
 > be defined within the provisioning service rather than individually.
 
 #### 3️⃣ Request:
