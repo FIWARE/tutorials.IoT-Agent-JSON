@@ -884,6 +884,12 @@ Effectively the IoT Agent is offering a simplified facade pattern of well-known 
 Therefore this section of registering and invoking commands **duplicates** the instructions found in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Agent)
 
+> ![NOTE]
+> If the device is provisioned, but no data concerning the Entity is present in the context yet, the invocation must
+> include the `type` of the Entity to succeed. However if the Entity `type` is already known
+> to the broker, this hint
+> is not necessary. This is because the registration is matched on both `id` and `type`.
+
 ### Ringing the Bell
 
 To invoke the `ring` command, the `ring` attribute must be updated in the context.
@@ -892,7 +898,7 @@ To invoke the `ring` command, the `ring` attribute must be updated in the contex
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs?type=Bell' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -916,7 +922,7 @@ To invoke the `open` command, the `open` attribute must be updated in the contex
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Door:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Door:001/attrs?type=Door' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -936,7 +942,7 @@ To switch on the **Smart Lamp**, the `on` attribute must be updated in the conte
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs?type=Lamp' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
