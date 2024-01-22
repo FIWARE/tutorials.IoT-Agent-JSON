@@ -696,14 +696,14 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 #### Response:
 
-```jsonld
+```json
 {
     "@context": "http://context/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
     "temperature": {
         "type": "Property",
-        "value": "3",
+        "value": 3,
         "unitCode": "CEL",
         "observedAt": "2020-09-14T15:23:12.263Z"
     }
@@ -746,7 +746,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 
 #### Response:
 
-```jsonld
+```json
 [
     {
         "@context": "http://context/ngsi-context.jsonld",
@@ -906,7 +906,6 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 -H 'fiware-service: openiot' \
 -H 'fiware-servicepath: /' \
 -H 'Content-Type: application/json' \
--H 'Cookie: _csrf=MAPTGFPcoPnewsGCWklHi4Mq' \
 --data-raw '{
   "devices": [
     {
