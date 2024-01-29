@@ -83,7 +83,7 @@ services:
     hostname: iot-sensors
     container_name: fiware-tutorial
     depends_on:
-      - orion
+      - orion-v2
       - iot-agent
     networks:
       default:
@@ -128,10 +128,11 @@ services:
     volumes:
       - mongo-db:/data
     healthcheck:
-      test: |
-        host=`hostname --ip-address || echo '127.0.0.1'`; 
-        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     
 networks:
   default:
