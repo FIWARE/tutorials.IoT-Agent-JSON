@@ -884,7 +884,7 @@ Effectively the IoT Agent is offering a simplified facade pattern of well-known 
 Therefore this section of registering and invoking commands **duplicates** the instructions found in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Agent)
 
-> ![NOTE]
+> [!NOTE]
 > If the device is provisioned, but no data concerning the Entity is present in the context yet, the invocation must
 > include the `type` of the Entity to succeed. However if the Entity `type` is already known
 > to the broker, this hint
