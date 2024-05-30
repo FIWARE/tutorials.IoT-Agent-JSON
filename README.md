@@ -38,7 +38,7 @@ git checkout NGSI-v2
 
 ```console
 git clone https://github.com/FIWARE/tutorials.IoT-Agent-JSON.git
-cd tutorials.IoT-Agent
+cd tutorials.IoT-Agent-JSON
 git checkout NGSI-LD
 
 ./services create
