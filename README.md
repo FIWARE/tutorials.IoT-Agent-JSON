@@ -393,6 +393,7 @@ repository:
 ```
 
 > [!NOTE]
+>
 > If you want to clean up and start over again you can do so with the following command:
 >
 > ```console
@@ -552,8 +553,9 @@ Three types of measurement attributes can be provisioned:
     context broker.
 
 > [!NOTE]
->  In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
-> be defined within the provisioning service rather than individually.
+>
+> In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can be defined
+> within the provisioning service rather than individually.
 
 #### 3️⃣ Request:
 
@@ -725,7 +727,7 @@ directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is
 invoked by the context broker once we have connected it up. To test the configuration you can run the command directly
 as shown:
 
-#### 7️⃣  Request:
+#### 7️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -754,7 +756,7 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker.
 
-#### 8️⃣  Request:
+#### 8️⃣ Request:
 
 ```console
 curl -X GET \
@@ -889,10 +891,10 @@ Therefore this section of registering and invoking commands **duplicates** the i
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Agent)
 
 > [!NOTE]
+>
 > If the device is provisioned, but no data concerning the Entity is present in the context yet, the invocation must
-> include the `type` of the Entity to succeed. However if the Entity `type` is already known
-> to the broker, this hint
-> is not necessary. This is because the registration is matched on both `id` and `type`.
+> include the `type` of the Entity to succeed. However if the Entity `type` is already known to the broker, this hint is
+> not necessary. This is because the registration is matched on both `id` and `type`.
 
 ### Ringing the Bell
 
