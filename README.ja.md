@@ -1408,8 +1408,7 @@ curl -X GET \
             "value": "urn:ngsi-ld:Building:barn002"
         }
     ],
-    "protocol": "PDI-IoTA-UltraLight",
-    "explicitAttrs": false
+    "protocol": "PDI-IoTA-UltraLight"
 }
 ```
 

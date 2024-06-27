@@ -1376,8 +1376,7 @@ The response includes all the commands and attributes mappings associated with t
             "value": "urn:ngsi-ld:Building:barn002"
         }
     ],
-    "protocol": "PDI-IoTA-UltraLight",
-    "explicitAttrs": false
+    "protocol": "PDI-IoTA-UltraLight"
 }
 ```
 
