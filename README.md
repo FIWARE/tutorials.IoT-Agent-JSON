@@ -874,7 +874,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
     "on_status": {
         "type": "Property",
         "value": {
-            "@type": "commandStatus",
+            "type": "commandStatus",
             "@value": "OK"
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
@@ -882,7 +882,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
     "on_info": {
         "type": "Property",
         "value": {
-            "@type": "commandResult",
+            "type": "commandResult",
             "@value": "OK"
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
