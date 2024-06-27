@@ -883,7 +883,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
         "type": "Property",
         "value": {
             "@type": "commandResult",
-            "@value": " on OK"
+            "@value": "OK"
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
     },
