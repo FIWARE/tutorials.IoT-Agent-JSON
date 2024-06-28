@@ -669,6 +669,7 @@ curl -iX POST \
      "device_id":   "motion001",
      "entity_name": "urn:ngsi-ld:Motion:001",
      "entity_type": "Motion",
+     "apikey": "4jggokgpepnvsb2uv4s40d59ov",
      "timezone":    "Europe/Berlin",
      "attributes": [
        { "object_id": "c", "name": "count", "type": "Integer" }
