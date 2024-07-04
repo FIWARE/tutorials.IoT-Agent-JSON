@@ -534,10 +534,10 @@ Agent は最初に Context Broker がレスポンスしている URL を認識�
 
 ```console
 curl -iX POST 'http://localhost:4041/iot/services' \
--H 'fiware-service: openiot' \
--H 'fiware-servicepath: /' \
--H 'Content-Type: application/json' \
---data-raw '{
+    -H 'fiware-service: openiot' \
+    -H 'fiware-servicepath: /' \
+    -H 'Content-Type: application/json' \
+    --data-raw '{
     "services": [
         {
             "apikey": "4jggokgpepnvsb2uv4s40d59ov",
@@ -704,9 +704,9 @@ Context Broker からエンティティのデータを取得することで、�
 
 ```console
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
-    -H 'fiware-service: openiot' \
-    -H 'fiware-servicepath: /' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'NGSILD-Tenant: openiot' \
+    -H 'Accept: application/ld+json' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -d 'attrs=temperature'
 ```
 
@@ -714,7 +714,10 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 ```json
 {
-    "@context": "http://context/ngsi-context.jsonld",
+    "@context": [
+            "http://context/ngsi-context.jsonld",
+            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
+        ],
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
     "temperature": {
@@ -753,9 +756,9 @@ curl -iX POST 'http://localhost:7896/iot/json?k=4jggokgpepnvsb2uv4s40d59ov&i=mot
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
--H 'NGSILD-Tenant: openiot' \
--H 'NGSILD-Path: /' \
--H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+    -H 'NGSILD-Tenant: openiot' \
+    -H 'Accept: application/ld+json' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### レスポンス:
@@ -763,7 +766,10 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 ```json
 [
     {
-        "@context": "http://context/ngsi-context.jsonld",
+        "@context": [
+            "http://context/ngsi-context.jsonld",
+            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
+        ],
         "id": "urn:ngsi-ld:Device:motion003",
         "type": "Device",
         "c": {
@@ -863,7 +869,7 @@ Irrigation system をオンにするコマンドの結果は、Context Broker �
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
 ```
 
@@ -1032,7 +1038,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
--H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1057,7 +1063,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1078,7 +1084,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:t
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
