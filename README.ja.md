@@ -251,7 +251,7 @@ tutorial:
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
         - "DUMMY_DEVICES_PAYLOAD=JSON"
-        - "IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld"
+        - "IOTA_JSON_LD_CONTEXT=http://context/user-context.jsonld"
 ```
 
 `tutorial` コンテナは2つのポートでリッスンしています:
@@ -272,7 +272,7 @@ tutorial:
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov`                          | JSON インタラクションに使用されるランダムなセキュリティ・キー - デバイスと IoT Agent 間の相互作用の整合性を確保するために使用されます |
 | DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | ダミー IoT デバイスで使用されるトランスポート・プロトコル                                                                             |
 | DUMMY_DEVICES_PAYLOAD   | `JSON`                                                | ダミー IoT デバイスで使用されるペイロード形式                                                                                         |
-| IOTA_JSON_LD_CONTEXT    | `http://context/ngsi-context.jsonld`                  | デバイス・データモデルの定義に使用される `@context` ファイルの場所                                                                     |
+| IOTA_JSON_LD_CONTEXT    | `http://context/user-context.jsonld`                  | デバイス・データモデルの定義に使用される `@context` ファイルの場所                                                                     |
 
 YAML ファイルで説明されている他の `tutorial` コンテナ設定値は、このチュートリアルでは使用しません。
 
@@ -314,7 +314,7 @@ iot-agent:
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
         - IOTA_DEFAULT_RESOURCE=/iot/json
-        - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
+        - IOTA_JSON_LD_CONTEXT=http://context/user-context.jsonld
         - IOTA_FALLBACK_TENANT=openiot
         - IOTA_MULTI_CORE=true
 ```
@@ -343,7 +343,7 @@ iot-agent:
 | IOTA_MONGO_DB        | `iotagentul`                         | mongoDB で使用されるデータベースの名前                                                                                                             |
 | IOTA_HTTP_PORT       | `7896`                               | IoT Agent が HTTP 経由で IoT デバイス トラフィックをリッスンするポート                                                                             |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041`              | コマンドの登録時に Context Broker に渡される URL。Context Broker がデバイスにコマンドを発行するときにフォワーディング URL の場所として使用されます |
-| IOTA_JSON_LD_CONTEXT | `http://context/ngsi-context.jsonld` | デバイス データ モデルの定義に使用される `@context` ファイルの場所                                                                                 |
+| IOTA_JSON_LD_CONTEXT | `http://context/user-context.jsonld` | デバイス データ モデルの定義に使用される `@context` ファイルの場所                                                                                 |
 | IOTA_FALLBACK_TENANT | `openiot`                            | 通信から明示的なテナントを受信していない場合に使用するテナント                                                                                     |
 
 <a name="prerequisites"></a>
@@ -715,7 +715,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 ```json
 {
     "@context": [
-            "http://context/ngsi-context.jsonld",
+            "http://context/user-context.jsonld",
             "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
         ],
     "id": "urn:ngsi-ld:Device:temperature001",
@@ -767,7 +767,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 [
     {
         "@context": [
-            "http://context/ngsi-context.jsonld",
+            "http://context/user-context.jsonld",
             "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
         ],
         "id": "urn:ngsi-ld:Device:motion003",
