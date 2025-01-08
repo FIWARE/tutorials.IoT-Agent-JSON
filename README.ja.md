@@ -716,7 +716,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 {
     "@context": [
             "http://context/user-context.jsonld",
-            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
+            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
         ],
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
@@ -768,7 +768,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
     {
         "@context": [
             "http://context/user-context.jsonld",
-            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.7.jsonld"
+            "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
         ],
         "id": "urn:ngsi-ld:Device:motion003",
         "type": "Device",
@@ -1530,4 +1530,4 @@ curl -iX DELETE \
 
 ## ライセンス
 
-[MIT](LICENSE) © 2021-2024 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2021-2025 FIWARE Foundation e.V.
