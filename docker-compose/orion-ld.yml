@@ -45,6 +45,8 @@ services:
     
   # IoT-Agent is configured for the JSON Protocol
   iot-agent:
+    depends_on:
+      - orion
     environment:
       - IOTA_DEFAULT_RESOURCE=/iot/json
       - IOTA_CB_HOST=orion # name of the context broker to update context
