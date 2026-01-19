@@ -1543,4 +1543,4 @@ curl -iX DELETE \
 
 ## ライセンス
 
-[MIT](LICENSE) © 2021-2025 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2021-2026 FIWARE Foundation e.V.
