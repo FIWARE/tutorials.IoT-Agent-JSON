@@ -822,7 +822,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:water001",
       "entity_type": "Device",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water001",
       "commands": [
@@ -935,7 +935,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:filling001",
       "entity_type": "FillingLevelSensor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/filling001",
       "commands": [
@@ -994,7 +994,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:tractor001",
       "entity_type": "Tractor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/tractor001",
       "commands": [
@@ -1358,7 +1358,7 @@ curl -iX POST 'http://localhost:4041/iot/devices' \
       "entity_name": "urn:ngsi-ld:Device:water002",
       "entity_type": "Device",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water002",
       "commands": [
@@ -1433,7 +1433,7 @@ curl -X GET \
             "value": "urn:ngsi-ld:Building:barn002"
         }
     ],
-    "protocol": "PDI-IoTA-UltraLight"
+    "protocol": "PDI-IoTA-JSON"
 }
 ```
 
@@ -1486,7 +1486,7 @@ curl -X GET \
                   "value": "urn:ngsi-ld:Store:002"
               }
           ],
-          "protocol": "PDI-IoTA-UltraLight"
+          "protocol": "PDI-IoTA-JSON"
       },
       etc...
     ]
