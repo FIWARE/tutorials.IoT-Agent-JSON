@@ -103,9 +103,7 @@ services:
       - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_AUTOCAST=true # Ensure Ultralight number values are read as numbers not strings
-      - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
-      - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
-      - IOTA_MONGO_DB=iotagentjson # The name of the database used in mongoDB
+      - IOTA_MONGO_URI=mongodb://mongo-db:${MONGO_DB_PORT}/iotagentjson
       - IOTA_HTTP_PORT=${IOTA_SOUTH_PORT} # The port used for device traffic over HTTP
       - IOTA_PROVIDER_URL=http://iot-agent:${IOTA_NORTH_PORT}
       - IOTA_DEFAULT_RESOURCE=/iot/json

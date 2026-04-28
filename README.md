@@ -49,6 +49,7 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
     -   [Connecting IoT Devices](#connecting-iot-devices)
         -   [Provisioning a Service Group](#provisioning-a-service-group)
         -   [Provisioning a Sensor](#provisioning-a-sensor)
+        -   [Pre-creating Actuator Entities](#pre-creating-actuator-entities)
         -   [Provisioning an Actuator](#provisioning-an-actuator)
         -   [Provisioning a Filling Station](#provisioning-a-filling-station)
         -   [Provisioning a Tractor FMIS System](#provisioning-a-tractor-fmis-system)
@@ -310,9 +311,7 @@ iot-agent:
         - IOTA_TIMESTAMP=true
         - IOTA_CB_NGSI_VERSION=ld
         - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo-db
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentjson
+        - IOTA_MONGO_URI=mongodb://mongo-db:${MONGO_DB_PORT}/iotagentjson
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
         - IOTA_DEFAULT_RESOURCE=/iot/json
@@ -330,23 +329,21 @@ information such as device URLs and Keys. The container is listening on two port
 
 The `iot-agent` container is driven by environment variables as shown:
 
-| Key                  | Value                                | Description                                                                                                                                           |
-| -------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| IOTA_CB_HOST         | `orion`                              | Hostname of the context broker to update context                                                                                                      |
-| IOTA_CB_PORT         | `1026`                               | Port that context broker listens on to update context                                                                                                 |
-| IOTA_NORTH_PORT      | `4041`                               | Port used for Configuring the IoT Agent and receiving context updates from the context broker                                                         |
-| IOTA_REGISTRY_TYPE   | `mongodb`                            | Whether to hold IoT device info in memory or in a database                                                                                            |
-| IOTA_LOG_LEVEL       | `DEBUG`                              | The log level of the IoT Agent                                                                                                                        |
-| IOTA_TIMESTAMP       | `true`                               | Whether to supply timestamp information with each measurement received from attached devices                                                          |
-| IOTA_CB_NGSI_VERSION | `LD`                                 | Whether to supply use NGSI-LD when sending updates for active attributes                                                                              |
-| IOTA_AUTOCAST        | `true`                               | Ensure JSON number values are read as numbers not strings                                                                                             |
-| IOTA_MONGO_HOST      | `context-db`                         | The hostname of mongoDB - used for holding device information                                                                                         |
-| IOTA_MONGO_PORT      | `27017`                              | The port mongoDB is listening on                                                                                                                      |
-| IOTA_MONGO_DB        | `iotagentul`                         | The name of the database used in mongoDB                                                                                                              |
-| IOTA_HTTP_PORT       | `7896`                               | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
-| IOTA_PROVIDER_URL    | `http://iot-agent:4041`              | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
-| IOTA_JSON_LD_CONTEXT | `http://context/user-context.jsonld` | The location of the `@context` file used to define the device data models                                                                             |
-| IOTA_FALLBACK_TENANT | `openiot`                            | The tenant to use if no explicit tenant has been received from communications                                                                         |
+| Key                  | Value                                   | Description                                                                                                                                           |
+| -------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IOTA_CB_HOST         | `orion`                                 | Hostname of the context broker to update context                                                                                                      |
+| IOTA_CB_PORT         | `1026`                                  | Port that context broker listens on to update context                                                                                                 |
+| IOTA_NORTH_PORT      | `4041`                                  | Port used for Configuring the IoT Agent and receiving context updates from the context broker                                                         |
+| IOTA_REGISTRY_TYPE   | `mongodb`                               | Whether to hold IoT device info in memory or in a database                                                                                            |
+| IOTA_LOG_LEVEL       | `DEBUG`                                 | The log level of the IoT Agent                                                                                                                        |
+| IOTA_TIMESTAMP       | `true`                                  | Whether to supply timestamp information with each measurement received from attached devices                                                          |
+| IOTA_CB_NGSI_VERSION | `LD`                                    | Whether to supply use NGSI-LD when sending updates for active attributes                                                                              |
+| IOTA_AUTOCAST        | `true`                                  | Ensure JSON number values are read as numbers not strings                                                                                             |
+| IOTA_MONGO_URI       | `mongodb://mongo-db:27017/iotagentjson` | The URI of mongoDB - used for holding device information                                                                                              |
+| IOTA_HTTP_PORT       | `7896`                                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
+| IOTA_PROVIDER_URL    | `http://iot-agent:4041`                 | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
+| IOTA_JSON_LD_CONTEXT | `http://context/user-context.jsonld`    | The location of the `@context` file used to define the device data models                                                                             |
+| IOTA_FALLBACK_TENANT | `openiot`                               | The tenant to use if no explicit tenant has been received from communications                                                                         |
 
 # Prerequisites
 
@@ -798,6 +795,47 @@ As you can see, the Entity type and `static_attributes` from the service group h
 the context broker, however since the measure `{"c": 1}` does not have a mapping, the name of the Property has been
 copied directly from the received measure.
 
+### Pre-creating Actuator Entities
+
+Prior versions of the NGSI-LD IoT Agent were able to create device entities within the context broker at provisioning
+time. Recent releases require that any entity associated with a device which exposes commands must already exist within
+the context broker before the IoT Agent can register itself as a context source for those commands.
+
+For pure sensors this restriction does not apply, since the IoT Agent creates the entity within the context broker when
+the first measurement is received. For actuators, however, the entity must be pre-created so that the IoT Agent can
+attach the necessary context source registration for command forwarding.
+
+The following request creates minimal placeholder entities for all actuator devices that will be provisioned within this
+tutorial:
+
+#### 8️⃣ Request:
+
+```console
+curl -iX POST 'http://localhost:1026/ngsi-ld/v1/entityOperations/upsert' \
+    -H 'Content-Type: application/json' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'NGSILD-Tenant: openiot' \
+    -H 'Accept: application/ld+json' \
+    --data-raw '[
+  {
+    "id": "urn:ngsi-ld:Device:water001",
+    "type": "Water"
+  },
+  {
+    "id": "urn:ngsi-ld:Device:water002",
+    "type": "Water"
+  },
+  {
+    "id": "urn:ngsi-ld:Device:filling001",
+    "type": "FillingLevelSensor"
+  },
+  {
+    "id": "urn:ngsi-ld:Device:tractor001",
+    "type": "Tractor"
+  }
+]'
+```
+
 ### Provisioning an Actuator
 
 Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds the location where
@@ -806,7 +844,7 @@ invoked. The example below provisions a water with the `deviceId=water001`. The 
 `http://iot-sensors:3001/iot/water001` and it can accept the `on` command. The `transport=HTTP` attribute defines the
 communications protocol to be used.
 
-#### 8️⃣ Request:
+#### 9️⃣ Request:
 
 ```console
 curl -L -X POST \
@@ -819,9 +857,9 @@ curl -L -X POST \
     {
       "device_id": "water001",
       "entity_name": "urn:ngsi-ld:Device:water001",
-      "entity_type": "Device",
+      "entity_type": "Water",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water001",
       "commands": [
@@ -848,7 +886,7 @@ directly to the IoT Agent's North Port using the `/ngsi-ld/v1/entities/` endpoin
 eventually be invoked by the context broker once we have connected it up. To test the configuration you can run the
 command directly as shown:
 
-#### 9️⃣ Request:
+#### 1️⃣0️⃣ Request:
 
 ```console
 curl -L -X PATCH \
@@ -870,7 +908,7 @@ If you are viewing the device monitor page, you can also see the state of the wa
 
 The result of the command to turn on the irrigation system can be read by querying the entity within the Context Broker.
 
-#### 1️⃣0️⃣ Request:
+#### 1️⃣1️⃣ Request:
 
 ```console
 curl -L -X GET \
@@ -918,7 +956,7 @@ can be seen in the value of the `on_info` attribute.
 Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with
 both `attributes` and `command` attributes in the body of the request.
 
-#### 1️⃣1️⃣ Request:
+#### 1️⃣2️⃣ Request:
 
 ```console
 curl -L -X POST \
@@ -933,7 +971,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:filling001",
       "entity_type": "FillingLevelSensor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/filling001",
       "commands": [
@@ -975,7 +1013,7 @@ curl -L -X POST \
 
 Similarly, a **Tractor** with two commands (`start` and `stop`) and two attributes can be provisioned as follows:
 
-#### 1️⃣2️⃣ Request:
+#### 1️⃣3️⃣ Request:
 
 ```console
 curl -L -X POST \
@@ -990,7 +1028,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:tractor001",
       "entity_type": "Tractor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/tractor001",
       "commands": [
@@ -1011,7 +1049,7 @@ repeated here.
 
 The full list of provisioned devices can be obtained by making a GET request to the `/iot/devices` endpoint.
 
-#### 1️⃣3️⃣ Request:
+#### 1️⃣4️⃣ Request:
 
 ```console
 curl -L -X GET \
@@ -1035,7 +1073,7 @@ JSON requests directly the IoT devices as we did in the
 
 To invoke the `on` command, the `on` attribute must be updated in the context.
 
-#### 1️⃣4️⃣ Request:
+#### 1️⃣5️⃣ Request:
 
 ```console
 curl -L -X PATCH \
@@ -1059,7 +1097,7 @@ If you are viewing the device monitor page, you can also see the state of the wa
 
 To invoke the `start` command, the `start` attribute must be updated in the context.
 
-#### 1️⃣5️⃣ Request:
+#### 1️⃣6️⃣ Request:
 
 ```console
 curl -L -X PATCH \
@@ -1079,7 +1117,7 @@ curl -L -X PATCH \
 
 Change the state of the **Fillling System**, the `add` attribute must be updated in the context.
 
-#### 1️⃣6️⃣ Request:
+#### 1️⃣7️⃣ Request:
 
 ```console
 curl -L -X PATCH \
@@ -1112,7 +1150,7 @@ Use the `resource` and `apikey` parameters to uniquely identify a service group.
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices will be sending
 messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
 
-#### 1️⃣7️⃣ Request:
+#### 1️⃣8️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -1139,7 +1177,7 @@ This example obtains the full details of a provisioned service with a given `res
 Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource`
 parameter.
 
-#### 1️⃣8️⃣ Request:
+#### 1️⃣9️⃣ Request:
 
 ```console
 curl -X GET \
@@ -1201,7 +1239,7 @@ commands or attribute mappings.
 
 This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
 
-#### 1️⃣9️⃣ Request:
+#### 2️⃣0️⃣ Request:
 
 ```console
 curl -X GET \
@@ -1266,7 +1304,7 @@ This example updates an existing service group with a given `resource` path and 
 Service group details can be updated by making a PUT request to the `/iot/services` endpoint and providing a `resource`
 and `apikey` parameters.
 
-#### 2️⃣0️⃣ Request:
+#### 2️⃣1️⃣ Request:
 
 ```console
 curl -iX PUT \
@@ -1287,7 +1325,7 @@ It means that requests to `http://iot-agent:7896/iot/json?i=<device_id>&k=4jggok
 Agent is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
 `resource` parameters must be supplied in order to identify the service group to be deleted.
 
-#### 2️⃣1️⃣ Request:
+#### 2️⃣2️⃣ Request:
 
 ```console
 curl -iX DELETE \
@@ -1310,12 +1348,12 @@ Use the `<device-id>` to uniquely identify a device.
 
 ### Creating a Provisioned Device
 
-This example provisions an individual device. It maps the `device_id=water002` to the entity URN `urn:ngsi-ld:water:002`
-and gives the entity a type `water`. The IoT Agent has been informed that the device offers two commands (`on` and
-`off`) and is listening on `http://iot-sensors:3001/iot/water002` using HTTP. `attributes`, `lazy` attributes and
-`static_attributes` can also be provisioned.
+This example provisions an individual device. It maps the `device_id=water002` to the entity URN
+`urn:ngsi-ld:Device:water002` and gives the entity a type `Water`. The IoT Agent has been informed that the device
+offers two commands (`on` and `off`) and is listening on `http://iot-sensors:3001/iot/water002` using HTTP.
+`attributes`, `lazy` attributes and `static_attributes` can also be provisioned.
 
-#### 2️⃣2️⃣ Request:
+#### 2️⃣3️⃣ Request:
 
 ```console
 curl -iX POST 'http://localhost:4041/iot/devices' \
@@ -1327,9 +1365,9 @@ curl -iX POST 'http://localhost:4041/iot/devices' \
     {
       "device_id": "water002",
       "entity_name": "urn:ngsi-ld:Device:water002",
-      "entity_type": "Device",
+      "entity_type": "Water",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water002",
       "commands": [
@@ -1357,7 +1395,7 @@ This example obtains the full details of a provisioned device with a given `<dev
 
 Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
 
-#### 2️⃣3️⃣ Request:
+#### 2️⃣4️⃣ Request:
 
 ```console
 curl -X GET \
@@ -1376,7 +1414,7 @@ The response includes all the commands and attributes mappings associated with t
     "service": "openiot",
     "service_path": "/",
     "entity_name": "urn:ngsi-ld:Device:water002",
-    "entity_type": "Device",
+    "entity_type": "Water",
     "apikey": "4jggokgpepnvsb2uv4s40d59ov",
     "endpoint": "http://iot-sensors:3001/iot/water002",
     "transport": "HTTP",
@@ -1401,7 +1439,7 @@ The response includes all the commands and attributes mappings associated with t
             "value": "urn:ngsi-ld:Building:barn002"
         }
     ],
-    "protocol": "PDI-IoTA-JSON"
+    "protocol": "IoTA-JSON"
 }
 ```
 
@@ -1409,7 +1447,7 @@ The response includes all the commands and attributes mappings associated with t
 
 This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.
 
-#### 2️⃣4️⃣ Request:
+#### 2️⃣5️⃣ Request:
 
 ```console
 curl -X GET \
@@ -1451,7 +1489,7 @@ The response includes all the commands and attributes mappings associated with a
                   "value": "urn:ngsi-ld:Store:002"
               }
           ],
-          "protocol": "PDI-IoTA-JSON"
+          "protocol": "IoTA-JSON"
       },
       etc...
     ]
@@ -1462,7 +1500,7 @@ The response includes all the commands and attributes mappings associated with a
 
 This example updates an existing provisioned device by making a PUT request to the `/iot/devices/<device-id>` endpoint.
 
-#### 2️⃣5️⃣ Request:
+#### 2️⃣6️⃣ Request:
 
 ```console
 curl -iX PUT \
@@ -1482,7 +1520,7 @@ This example removes a provisioned device by making a DELETE request to the `/io
 The device attributes will no longer be mapped and commands can no longer be sent to the device. If the device is making
 active measurements, they will still be handled with default values if the associated service has not been deleted.
 
-#### 2️⃣6️⃣ Request:
+#### 2️⃣7️⃣ Request:
 
 ```console
 curl -iX DELETE \

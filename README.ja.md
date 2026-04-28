@@ -308,9 +308,7 @@ iot-agent:
         - IOTA_TIMESTAMP=true
         - IOTA_CB_NGSI_VERSION=ld
         - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo-db
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentjson
+        - IOTA_MONGO_URI=mongodb://mongo-db:${MONGO_DB_PORT}/iotagentjson
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
         - IOTA_DEFAULT_RESOURCE=/iot/json
@@ -338,9 +336,7 @@ iot-agent:
 | IOTA_TIMESTAMP       | `true`                               | 接続されたデバイスから受信した各測定値でタイムスタンプ情報を提供するかどうか                                                                       |
 | IOTA_CB_NGSI_VERSION | `LD`                                 | アクティブな属性の更新を送信するときに使用する NGSI-LD を供給するかどうか                                                                          |
 | IOTA_AUTOCAST        | `true`                               | JSON number の値が文字列ではなく数値として読み取られるようにする                                                                                   |
-| IOTA_MONGO_HOST      | `context-db`                         | mongoDB のホスト名 - デバイス情報を保持するために使用されます                                                                                      |
-| IOTA_MONGO_PORT      | `27017`                              | mongoDB がリッスンしているポート                                                                                                                   |
-| IOTA_MONGO_DB        | `iotagentul`                         | mongoDB で使用されるデータベースの名前                                                                                                             |
+| IOTA_MONGO_URI         | `mongodb://mongo-db:27017/iotagentjson` | The URI of mongoDB - used for holding device information                                                                        |
 | IOTA_HTTP_PORT       | `7896`                               | IoT Agent が HTTP 経由で IoT デバイス トラフィックをリッスンするポート                                                                             |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041`              | コマンドの登録時に Context Broker に渡される URL。Context Broker がデバイスにコマンドを発行するときにフォワーディング URL の場所として使用されます |
 | IOTA_JSON_LD_CONTEXT | `http://context/user-context.jsonld` | デバイス データ モデルの定義に使用される `@context` ファイルの場所                                                                                 |
@@ -822,7 +818,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:water001",
       "entity_type": "Device",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water001",
       "commands": [
@@ -935,7 +931,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:filling001",
       "entity_type": "FillingLevelSensor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/filling001",
       "commands": [
@@ -994,7 +990,7 @@ curl -L -X POST \
       "entity_name": "urn:ngsi-ld:Device:tractor001",
       "entity_type": "Tractor",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/tractor001",
       "commands": [
@@ -1358,7 +1354,7 @@ curl -iX POST 'http://localhost:4041/iot/devices' \
       "entity_name": "urn:ngsi-ld:Device:water002",
       "entity_type": "Device",
       "apikey": "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-JSON",
+      "protocol": "IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/water002",
       "commands": [
@@ -1433,7 +1429,7 @@ curl -X GET \
             "value": "urn:ngsi-ld:Building:barn002"
         }
     ],
-    "protocol": "PDI-IoTA-JSON"
+    "protocol": "IoTA-JSON"
 }
 ```
 
@@ -1486,7 +1482,7 @@ curl -X GET \
                   "value": "urn:ngsi-ld:Store:002"
               }
           ],
-          "protocol": "PDI-IoTA-JSON"
+          "protocol": "IoTA-JSON"
       },
       etc...
     ]
