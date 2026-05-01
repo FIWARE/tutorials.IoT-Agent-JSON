@@ -74,7 +74,9 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 # Why are multiple IoT Agents needed?
 
-> "Ils en conclurent que la syntaxe est une fantaisie et la grammaire une illusion."
+> "Agriculture is the foundation of all other arts."
+>
+> — Cyrus the Great
 >
 > — Gustave Flaubert (Bouvard and Pecuchet)
 
