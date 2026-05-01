@@ -73,9 +73,9 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 # Why are multiple IoT Agents needed?
 
-> "Ils en conclurent que la syntaxe est une fantaisie et la grammaire une illusion."
+> "Everything in food is science. The only thing that isn't is the love."
 >
-> — Gustave Flaubert (Bouvard and Pecuchet)
+> — Alton Brown
 
 As defined previously, an IoT Agent is a component that lets a group of devices send their data to and be managed from a
 Context Broker using their own native protocols. Every IoT Agent is defined for a single payload format, although they
