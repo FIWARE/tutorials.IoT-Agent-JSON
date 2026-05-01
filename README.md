@@ -77,8 +77,6 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 > "Agriculture is the foundation of all other arts."
 >
 > — Cyrus the Great
->
-> — Gustave Flaubert (Bouvard and Pecuchet)
 
 As defined previously, an IoT Agent is a component that lets a group of devices sends their data to and be managed from
 a Context Broker using their own native protocols. Every IoT Agent is defined for a single payload format, although they
