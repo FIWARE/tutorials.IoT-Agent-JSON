@@ -90,11 +90,11 @@ services:
     deploy:
       resources:
         limits:
+          memory: 1024M
+          cpus: '2.0'
+        reservations:
           memory: 512M
           cpus: '1.0'
-        reservations:
-          memory: 256M
-          cpus: '0.5'
     environment:
       - IOTA_CB_HOST=orion # name of the context broker to update context
       - IOTA_CB_PORT=${ORION_LD_PORT} # port the context broker listens on to update context
